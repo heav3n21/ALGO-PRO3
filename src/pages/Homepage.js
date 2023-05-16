@@ -7,7 +7,7 @@ function Homepage() {
 
     return (
         <div className="text-white">
-            <motion.div animate={{ y: 0, scale: 1 }} transition={{ type: 'tween', duration: 1 }} initial={{ scale: 10 }} className="max-w-[800px] mt-[-106px] w-full h-screen mx-auto text-center flex flex-col justify-center  items-center">
+            <motion.div animate={{ y: 0, scale: 1 }} transition={{ type: 'tween', duration: 1 }} initial={{ scale: 2 }} className="max-w-[800px] mt-[-106px] w-full h-screen mx-auto text-center flex flex-col justify-center  items-center">
                 <p className="primary--text--color font-bold text-xl"> GROWING WITH A.I 4 ALGO </p>
                 <h1 className="md:text-7xl sm:text-5xl text-4xl font-bold md:py-6"> GROW WITH CODE CLUB</h1>
                 <div className="flex justify-center items-center ">
