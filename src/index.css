@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Color Theme Swatches in Hex */
+.Brama-Architectural-Bureau-1-hex { color: #40140A; }
+.Brama-Architectural-Bureau-2-hex { color: #8C331F; }
+.Brama-Architectural-Bureau-3-hex { color: #8C0E03; }
+.Brama-Architectural-Bureau-4-hex { color: #D96459; }
+.Brama-Architectural-Bureau-5-hex { color: #0D0D0D; }
+:root{
+  --background--color: #181818;;
+  --primary--text--color: #d81465;
+  --bg--container--black: #141414;
+  --color--cyan: #17BEBB;
+}
+
+
+body{
+  background-color: var(--background--color);
+ 
+}
+.bg--container--cyan{
+  background-color: var(--color--cyan);
+}
+.primary--text--color{
+  color: var(--primary--text--color)
+}
+.second--text--color{
+  color:var(--color--cyan)
+
+}
+.primary--background--color{
+  background-color: var(--primary--text--color);
+}
+.bg--container--black{
+  background-color: var(--bg--container--black);
+}
+.nav--bar{
+ background-color: var(--bg--container--black);
+  box-shadow: 1px 1px 2rem black;
+
+}
+
+.shadow--css{
+  box-shadow: 1px 1px 1rem black;
+}
+
+.btn--hover--pink:hover{
+  background-color: var(--primary--text--color);
+  transition: 0.6s;
+  
+
+}
+/* .btn--hover--cyan{
+  transition: opacity 0.3s; */
+/* } */
+.btn--hover--cyan:hover{
+  transition: 2s;
+  opacity: 80%;
+  border: 1px solid var(--color--cyan) ;
+
+
+}
+nav a:hover{
+  font-weight:bold;
+  transition: font-weight 0.3s; 
+}
+nav a:hover{
+ 
+  font-size: large;
+  transition: 0.9s;
+color: var(--primary--text--color);
+
+}
