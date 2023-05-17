@@ -7,7 +7,7 @@ mutation login($email: String!, $password: String!){
         token
         user{
             _id
-            username
+            
         }
     }
 }
@@ -21,7 +21,7 @@ mutation addUser($email:String!,$password:String!){
      token
      user{
             _id
-            username
+            
         }
     }
 }
