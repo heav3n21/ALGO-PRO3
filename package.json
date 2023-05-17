@@ -9,10 +9,18 @@
     "install": "cd server && npm i && cd ../client && npm i",
     "build": "cd client && npm run build"
   },
-  "keywords": ["algorithms", "coding","code practice","algorithm practice"],
+  "keywords": [
+    "algorithms",
+    "coding",
+    "code practice",
+    "algorithm practice"
+  ],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "concurrently": "^5.1.0"
+  },
+  "dependencies": {
+    "jwt-decode": "^3.1.2"
   }
 }

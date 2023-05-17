@@ -12,7 +12,7 @@ authMiddleware:function ({req}){
     //this will cut of the bearer thats placed on the tokens
 
     if(req.headers.authorization){
-         token = getToken.split(' ').pop().trim(); 
+         token = token.split(' ').pop().trim(); 
     }
     if(!token){
         return req
@@ -26,8 +26,9 @@ try {
 }
 return req;
 },
-signToken({username, email, _id}){
-    const payload = { username, email, _id};
-    return jwt.sign({data: payload},secret,{expiresIn: expiration});
+signToken:function ({username, email, _id}){
+    const payload = { username, email, _id };
+
+    return jwt.sign({ data: payload }, secret, { expiresIn: expiration });
 },
 };
