@@ -11,7 +11,8 @@ const Navbar = () => {
         setNav(!nav)
     }
     return (
-        <nav className="flex justify-between items-center h-24 max-w-[100%] mx-auto px-4 text-white  nav--bar">
+            <div className="sticky top-0">
+        <nav className="flex  justify-between items-center h-24 max-w-[100%] mx-auto px-4 text-white  nav--bar">
             <h1 className="w-full text-3xl font-bold primary--text--color"> CODE CLUB</h1>
             <ul className="hidden md:flex">
                 <Link to={'/'}  className="p-4 nav--links">HOME</Link>
@@ -28,14 +29,15 @@ const Navbar = () => {
                 <h1 className="w-full text-3xl font-bold primary--text--color m-4"> CODE CLUB</h1>
                 <ul className="p-4 flex flex-col">
                    
-                    <Link to={'/'} className="p-4 border-b border-gray-500 w-[100%]">HOME</Link>
-                    <Link to={'/login'} className="p-4 border-b border-gray-500">LOGIN</Link>
-                    <Link className="p-4 border-b border-gray-500">CHAT</Link>
-                    <Link className="p-4 border-b border-gray-500">CREATORS</Link>
-                    <Link className="p-4">CONTACT</Link>
+                    <Link onClick={() =>{ setNav(false) }} to={'/'} className="p-4 border-b border-gray-500 w-[100%]">HOME</Link>
+                    <Link onClick={() =>{ setNav(false) }} to={'/login'} className="p-4 border-b border-gray-500">LOGIN</Link>
+                    <Link onClick={() =>{ setNav(false) }} className="p-4 border-b border-gray-500">CHAT</Link>
+                    <Link onClick={() =>{ setNav(false) }} className="p-4 border-b border-gray-500">CREATORS</Link>
+                    <Link onClick={() =>{ setNav(false) }} className="p-4">CONTACT</Link>
                 </ul>
             </div>
         </nav>
+        </div>
     )
 }
 
