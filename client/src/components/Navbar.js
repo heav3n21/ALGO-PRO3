@@ -1,19 +1,46 @@
 import React, { useState } from "react";
 
 const NavBar = () => {
-  const [showDropdown, setShowDropdown] = useState(false);
+  const [selectedLanguage, setSelectedLanguage] = useState(null);
+  const [selectedLevel, setSelectedLevel] = useState(null);
+  const [selectedConcept, setSelectedConcept] = useState(null);
+  const [showDropdownLang, setShowDropdownLang] = useState(false);
+  const [showDropdownLevel, setShowDropdownLevel] = useState(false);
+  const [showDropdownConcept, setShowDropdownConcept] = useState(false);
 
   const toggleDropdownLang = () => {
-    setShowDropdown(!showDropdown);
+    setShowDropdownLang(!showDropdownLang);
   };
 
+  const toggleDropdownLevel = () => {
+    setShowDropdownLevel(!showDropdownLevel);
+  };
 
+  const toggleDropdownConcept = () => {
+    setShowDropdownConcept(!showDropdownConcept);
+  };
+
+  const handleLanguageSelection = (language) => {
+    setSelectedLanguage(language === selectedLanguage ? null : language);
+    toggleDropdownLang();
+  };
+
+  const handleLevelSelection = (level) => {
+    setSelectedLevel(level === selectedLevel ? null : level);
+    toggleDropdownLevel();
+  };
+
+  const handleConceptSelection = (concept) => {
+    setSelectedConcept(concept === selectedConcept ? null : concept);
+    toggleDropdownConcept();
+  };
 
   return (
     <nav style={{ backgroundColor: "#000", padding: "10px" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <div className="relative">
           <button
+            className="language"
             style={{
               color: "#fff",
               cursor: "pointer",
@@ -24,9 +51,9 @@ const NavBar = () => {
             }}
             onClick={toggleDropdownLang}
           >
-            Languages ▼
+            {selectedLanguage ? selectedLanguage : "Languages"} ▼
           </button>
-          {showDropdown && (
+          {showDropdownLang && (
             <ul
               style={{
                 position: "absolute",
@@ -40,40 +67,22 @@ const NavBar = () => {
               }}
             >
               <li>
-                <a style={{ textDecoration: "none", color: "#fff", zIndex: "9999", cursor: "pointer", }}>
+                <a
+                  style={{ textDecoration: "none", color: "#fff", zIndex: "9999", cursor: "pointer" }}
+                  onClick={() => handleLanguageSelection("JavaScript")}
+                >
                   JavaScript
                 </a>
               </li>
               <li>
-                <a style={{ textDecoration: "none", color: "#fff", zIndex: "9999", cursor: "pointer",}}>
+                <a
+                  style={{ textDecoration: "none", color: "#fff", zIndex: "9999", cursor: "pointer" }}
+                  onClick={() => handleLanguageSelection("Python")}
+                >
                   Python
                 </a>
               </li>
-              <li>
-                <a style={{ textDecoration: "none", color: "#fff", zIndex: "9999", cursor: "pointer",}}>
-                  C++
-                </a>
-              </li>
-              <li>
-                <a style={{ textDecoration: "none", color: "#fff", zIndex: "9999", cursor: "pointer",}}>
-                  Java
-                </a>
-              </li>
-              <li>
-                <a style={{ textDecoration: "none", color: "#fff", zIndex: "9999", cursor: "pointer",}}>
-                  Ruby
-                </a>
-              </li>
-              <li>
-                <a style={{ textDecoration: "none", color: "#fff", zIndex: "9999", cursor: "pointer",}}>
-                  SQL
-                </a>
-              </li>
-              <li>
-                <a style={{ textDecoration: "none", color: "#fff", zIndex: "9999", cursor: "pointer",}}>
-                  PHP
-                </a>
-              </li>
+              {/* Add other language options */}
             </ul>
           )}
         </div>
@@ -87,11 +96,11 @@ const NavBar = () => {
               outline: "none",
               padding: "5px",
             }}
-            // onClick={toggleDropdown}
+            onClick={toggleDropdownLevel}
           >
-            Difficulty Level ▼
+            {selectedLevel ? selectedLevel : "Difficulty Level"} ▼
           </button>
-          {showDropdown && (
+          {showDropdownLevel && (
             <ul
               style={{
                 position: "absolute",
@@ -105,84 +114,82 @@ const NavBar = () => {
               }}
             >
               <li>
-                <a style={{ textDecoration: "none", color: "#fff", zIndex: "9999", cursor: "pointer",}}>
+                <a
+                  style={{ textDecoration : "none", color: "#fff", zIndex: "9999", cursor: "pointer" }}
+                  onClick={() => handleLevelSelection("Beginner")}
+                  >
                   Beginner
-                </a>
-              </li>
-              <li>
-                <a style={{ textDecoration: "none", color: "#fff", zIndex: "9999", cursor: "pointer",}}>
+                  </a>
+                  </li>
+                  <li>
+                  <a
+                  style={{ textDecoration: "none", color: "#fff", zIndex: "9999", cursor: "pointer" }}
+                  onClick={() => handleLevelSelection("Intermediate")}
+                  >
                   Intermediate
-                </a>
-              </li>
-              <li>
-                <a style={{ textDecoration: "none", color: "#fff", zIndex: "9999", cursor: "pointer",}}>
-                  Diffcult
-                </a>
-              </li>
-              <li>
-                <a style={{ textDecoration: "none", color: "#fff", zIndex: "9999", cursor: "pointer",}}>
-                  Pro-Level
-                </a>
-              </li>
-              
-            </ul>
-          )}
-        </div>
-        <div className="relative">
-          <button
-            style={{
-              color: "#fff",
-              cursor: "pointer",
-              backgroundColor: "transparent",
-              border: "none",
-              outline: "none",
-              padding: "5px",
-            }}
-            // onClick={toggleDropdown}
-          >
-            Concepts ▼
-          </button>
-          {showDropdown && (
-            <ul
-              style={{
-                position: "absolute",
-                backgroundColor: "#333",
-                color: "#fff",
-                padding: "10px",
-                borderRadius: "5px",
-                top: "100%",
-                left: "0",
-                zIndex: "9999",
-              }}
-            >
-              <li>
-                <a style={{ textDecoration: "none", color: "#fff", zIndex: "9999", cursor: "pointer",}}>
-                Algorithm Challenge
-                </a>
-              </li>
-              <li>
-                <a style={{ textDecoration: "none", color: "#fff", zIndex: "9999", cursor: "pointer",}}>
-                Data Structures
-                </a>
-              </li>
-              <li>
-                <a style={{ textDecoration: "none", color: "#fff", zIndex: "9999", cursor: "pointer",}}>
-                OOP (Object Oriented Programming)
-                </a>
-              </li>
-              Database Related Questions
-             
-            </ul>
-            
-          )}
-          <button style={{ color: "#fff", fontSize: "20px", fontWeight: "bold", textDecoration: "none" }}>
-          Generate Question
-        </button>
-        </div>
-      </div>
-    </nav>
-  );
-};
+                  </a>
+                  </li>
+                  
+                  </ul>
+                  )}
+                  </div>
+                  <div className="relative">
+                  <button
+                  style={{
+                  color: "#fff",
+                  cursor: "pointer",
+                  backgroundColor: "transparent",
+                  border: "none",
+                  outline: "none",
+                  padding: "5px",
+                  }}
+                  onClick={toggleDropdownConcept}
+                  >
+                  {selectedConcept ? selectedConcept : "Concept"} ▼
+                  </button>
+                  {showDropdownConcept && (
+                  <ul
+                  style={{
+                  position: "absolute",
+                  backgroundColor: "#333",
+                  color: "#fff",
+                  padding: "10px",
+                  borderRadius: "5px",
+                  top: "100%",
+                  left: "0",
+                  zIndex: "9999",
+                  }}
+                  >
+                  <li>
+                  <a
+                  style={{ textDecoration: "none", color: "#fff", zIndex: "9999", cursor: "pointer" }}
+                  onClick={() => handleConceptSelection("Functions")}
+                  >
+                  Functions
+                  </a>
+                  </li>
+                  <li>
+                  <a
+                  style={{ textDecoration: "none", color: "#fff", zIndex: "9999", cursor: "pointer" }}
+                  onClick={() => handleConceptSelection("Arrays")}
+                  >
+                  Arrays
+                  </a>
+                  </li>
+                
+                  </ul>
+                  )}
+                  </div>
+                  </div>
+                  <div style={{ marginTop: "10px", color: "#fff" }}>
+                  Selected Choices: {selectedLanguage}, {selectedLevel}, {selectedConcept}
+                  </div>
+                  </nav>
+                  );
+                  };
+                  
+                  export default NavBar;
 
-export default NavBar;
+               
+
 
