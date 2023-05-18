@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import ChatBubble from './ChatBubble'
 
-const NavBar = () => {
+const NavBar = ({code}) => {
+  console.log(`From Navbar: ${code}`)
   const [selectedLanguage, setSelectedLanguage] = useState(null);
   const [selectedLevel, setSelectedLevel] = useState(null);
   const [aiResponse, setAiResponse ] = useState("hello")
@@ -8,6 +10,8 @@ const NavBar = () => {
   const [showDropdownLang, setShowDropdownLang] = useState(false);
   const [showDropdownLevel, setShowDropdownLevel] = useState(false);
   const [showDropdownConcept, setShowDropdownConcept] = useState(false);
+  const [savedResponse, setSavedResponse] = useState(null);
+
 
   const toggleDropdownLang = () => {
     setShowDropdownLang(!showDropdownLang);
@@ -36,12 +40,8 @@ const NavBar = () => {
     toggleDropdownConcept();
   };
 
-
-    
-  
-
   let choices = `${selectedLanguage} ${selectedLevel} ${selectedConcept}`
-  let responseData = ""
+  
   const handleSelectedChoices = async (selectedLanguage, selectedLevel, selectedConcept) =>{
 if (selectedLanguage == null || selectedLevel == null || selectedConcept == null){
   // console.log("You Must Select a Language, Level and Concept before starting!")
@@ -57,10 +57,27 @@ const url = window.location.pathname + '/airesponse';
       body: JSON.stringify({ prompt: question}),
     });
     let responseData = await response.json();
-    console.log(responseData)
     setAiResponse(responseData.data)
-return responseData;
+    setSavedResponse(responseData.data);
+   
+    return responseData;
   }
+
+  console.log(savedResponse)
+
+  // if(typeof handleSelectedChoices(selectedLanguage, selectedLevel, selectedConcept) == "object" || handleSelectedChoices(selectedLanguage, selectedLevel, selectedConcept) === "error"){
+  
+  // } //else {
+  // let responseData = handleSelectedChoices(selectedLanguage, selectedLevel, selectedConcept);
+  // console.log(responseData);
+
+  // }
+const sendResponse = () =>{
+console.log(handleSelectedChoices(selectedLanguage, selectedLevel, selectedConcept))
+let response = ""
+}
+  
+  
 
   return (
     <>
@@ -215,6 +232,7 @@ return responseData;
                   <button onClick={() => handleSelectedChoices(selectedLanguage, selectedLevel, selectedConcept)}>
                   Get Question
                     </button>
+              
                   </div>
                   </nav>
                   <div style={{ fontFamily: 'Arial, sans-serif', backgroundColor: '#f5f5f5', margin: 0, padding: '20px' }}>
@@ -227,11 +245,12 @@ return responseData;
             <span style={{ fontWeight: 'bold' }}>User 1:</span>
             <div style={{ marginTop: '5px' }}>{aiResponse}</div>
           </div>
-          {/* Add more messages here */}
+          {}
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px', backgroundColor: '#f0f0f0' }}>
-          <input type="text" placeholder="Type your message" style={{ flexGrow: 1, padding: '5px', borderRadius: '3px', border: 'none' }} />
-          <button style={{ marginLeft: '10px', padding: '8px 15px', border: 'none', backgroundColor: '#4caf50', color: '#ffffff', borderRadius: '3px', cursor: 'pointer' }}>Send</button>
+         
+          <button style={{ marginLeft: '10px', padding: '8px 15px', border: 'none', backgroundColor: '#4caf50',
+           color: '#ffffff', borderRadius: '3px', cursor: 'pointer'}} onClick={()=> sendResponse()}> Send</button>
         </div>
       </div>
     </div>
@@ -240,6 +259,9 @@ return responseData;
                  ); };
                   
                   export default NavBar;
+
+               
+
 
                
 
