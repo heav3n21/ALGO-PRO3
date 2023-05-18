@@ -35,13 +35,16 @@ const myTheme = createTheme({
 
 
 export default function Chat(){
-  const [code, setCode] = useState("console.log('hello world!');");
+  const [code, setCode] = useState("console.log('Type your solution here');");
   const handleCodeChange = (value, viewUpdate) => {
+    setCode(value);
+  };
+  const updateCodeMirrorValue = (value) => {
     setCode(value);
   };
 return(
 <>
-<NavBar code={code} />
+<NavBar code={code} updateCodeMirrorValue={updateCodeMirrorValue}/>
 
 <CodeMirror
       value={code}
