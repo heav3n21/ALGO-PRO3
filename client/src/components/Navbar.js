@@ -63,7 +63,7 @@ const url = window.location.pathname + '/airesponse';
     return responseData;
   }
 
-  console.log(savedResponse)
+
 
   // if(typeof handleSelectedChoices(selectedLanguage, selectedLevel, selectedConcept) == "object" || handleSelectedChoices(selectedLanguage, selectedLevel, selectedConcept) === "error"){
   
@@ -72,9 +72,24 @@ const url = window.location.pathname + '/airesponse';
   // console.log(responseData);
 
   // }
-const sendResponse = () =>{
-console.log(handleSelectedChoices(selectedLanguage, selectedLevel, selectedConcept))
-let response = ""
+const sendResponse = async () =>{
+  let aiResponse = savedResponse
+  let userCode = `${code}`
+  let toAi = `How does my code look? The question was ${aiResponse}. and my code is ${userCode}`
+  console.log(toAi);
+  const url = window.location.pathname + '/airesponse';
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ prompt: toAi}),
+    });
+    let responseData = await response.json();
+    setAiResponse(responseData.data)
+
+
+
 }
   
   
