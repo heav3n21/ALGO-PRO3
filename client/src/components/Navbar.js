@@ -35,7 +35,28 @@ const NavBar = () => {
     toggleDropdownConcept();
   };
 
+  let choices = `${selectedLanguage} ${selectedLevel} ${selectedConcept}`
+  const handleSelectedChoices = async (selectedLanguage, selectedLevel, selectedConcept) =>{
+if (selectedLanguage == null || selectedLevel == null || selectedConcept == null){
+  alert("You Must Select a Language, Level and Concept before starting!")
+  return;
+}
+let question = `Give me a coding algorithm question. The coding language is ${selectedLanguage}, make the difficulty level ${selectedLevel}, and make the concept on ${selectedConcept}`
+const url = window.location.pathname + '/airesponse';
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ prompt: question}),
+    });
+    const responseData = await response.json();
+    console.log(responseData)
+return responseData;
+  }
+
   return (
+    <>
     <nav style={{ backgroundColor: "#000", padding: "10px" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <div className="relative">
@@ -182,13 +203,44 @@ const NavBar = () => {
                   </div>
                   </div>
                   <div style={{ marginTop: "10px", color: "#fff" }}>
-                  Selected Choices: {selectedLanguage}, {selectedLevel}, {selectedConcept}
+                  Selected Choices: {selectedLanguage} {selectedLevel} {selectedConcept}
+                  <br />
+                  <button onClick={() => handleSelectedChoices(selectedLanguage, selectedLevel, selectedConcept)}>
+                  Get Question
+                    </button>
                   </div>
                   </nav>
+                  <div style={{ fontFamily: 'Arial, sans-serif', backgroundColor: '#f5f5f5', margin: 0, padding: '20px' }}>
+      <div style={{ maxWidth: '800px', margin: '0 auto', backgroundColor: '#ffffff', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', borderRadius: '5px', overflow: 'hidden' }}>
+        <div style={{ backgroundColor: '#f0f0f0', padding: '10px', textAlign: 'center', fontSize: '18px', fontWeight: 'bold' }}>
+          Chat
+        </div>
+        <div style={{ padding: '20px', maxHeight: '400px', overflowY: 'scroll' }}>
+          <div style={{ marginBottom: '10px' }}>
+            <span style={{ fontWeight: 'bold' }}>User 1:</span>
+            <div style={{ marginTop: '5px' }}>Hello, can you help me with a coding question?</div>
+          </div>
+          <div style={{ marginBottom: '10px' }}>
+            <span style={{ fontWeight: 'bold' }}>User 2:</span>
+            <div style={{ marginTop: '5px' }}>Sure! What's your question?</div>
+          </div>
+          {/* Add more messages here */}
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px', backgroundColor: '#f0f0f0' }}>
+          <input type="text" placeholder="Type your message" style={{ flexGrow: 1, padding: '5px', borderRadius: '3px', border: 'none' }} />
+          <button style={{ marginLeft: '10px', padding: '8px 15px', border: 'none', backgroundColor: '#4caf50', color: '#ffffff', borderRadius: '3px', cursor: 'pointer' }}>Send</button>
+        </div>
+      </div>
+    </div>
+        </>
+                  
+                 
                   );
                   };
                   
                   export default NavBar;
+
+               
 
                
 
