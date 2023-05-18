@@ -35,19 +35,20 @@ const myTheme = createTheme({
 
 
 export default function Chat(){
-
+  const [code, setCode] = useState("console.log('hello world!');");
+  const handleCodeChange = (value, viewUpdate) => {
+    setCode(value);
+  };
 return(
 <>
-<NavBar/>
-<AiQuestion/>
+<NavBar code={code} />
+
 <CodeMirror
-      value="console.log('hello world!');"
+      value={code}
       height="500px"
       theme={myTheme}
       extensions={[javascript({ jsx: true })]}
-      onChange={(value, viewUpdate) => {
-        console.log('value:', value);
-      }}
+      onChange={handleCodeChange}
     />
 
 </>
