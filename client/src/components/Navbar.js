@@ -63,15 +63,6 @@ const url = window.location.pathname + '/airesponse';
     return responseData;
   }
 
-
-
-  // if(typeof handleSelectedChoices(selectedLanguage, selectedLevel, selectedConcept) == "object" || handleSelectedChoices(selectedLanguage, selectedLevel, selectedConcept) === "error"){
-  
-  // } //else {
-  // let responseData = handleSelectedChoices(selectedLanguage, selectedLevel, selectedConcept);
-  // console.log(responseData);
-
-  // }
 const sendResponse = async () =>{
   let aiResponse = savedResponse
   let userCode = `${code}`
@@ -87,11 +78,26 @@ const sendResponse = async () =>{
     });
     let responseData = await response.json();
     setAiResponse(responseData.data)
+}
 
+const getSolution = async () =>{
 
+  let toAi = `Can you show me the solution code. The question was ${aiResponse}. `
+  const url = window.location.pathname + '/airesponse';
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ prompt: toAi}),
+    });
+    let responseData = await response.json();
+    setAiResponse(responseData.data)
+  
 
 }
-  
+
+
   
 
   return (
@@ -265,7 +271,9 @@ const sendResponse = async () =>{
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px', backgroundColor: '#f0f0f0' }}>
          
           <button style={{ marginLeft: '10px', padding: '8px 15px', border: 'none', backgroundColor: '#4caf50',
-           color: '#ffffff', borderRadius: '3px', cursor: 'pointer'}} onClick={()=> sendResponse()}> Send</button>
+           color: '#ffffff', borderRadius: '3px', cursor: 'pointer'}} onClick={()=> sendResponse()}> Check Code</button>
+           <button style={{ marginLeft: '10px', padding: '8px 15px', border: 'none', backgroundColor: '#4caf50',
+           color: '#ffffff', borderRadius: '3px', cursor: 'pointer'}} onClick={()=> getSolution()}> Get Solution</button>
         </div>
       </div>
     </div>
