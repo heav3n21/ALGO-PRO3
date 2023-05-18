@@ -3,6 +3,7 @@ import React, { useState } from "react";
 const NavBar = () => {
   const [selectedLanguage, setSelectedLanguage] = useState(null);
   const [selectedLevel, setSelectedLevel] = useState(null);
+  const [aiResponse, setAiResponse ] = useState("hello")
   const [selectedConcept, setSelectedConcept] = useState(null);
   const [showDropdownLang, setShowDropdownLang] = useState(false);
   const [showDropdownLevel, setShowDropdownLevel] = useState(false);
@@ -35,11 +36,16 @@ const NavBar = () => {
     toggleDropdownConcept();
   };
 
+
+    
+  
+
   let choices = `${selectedLanguage} ${selectedLevel} ${selectedConcept}`
+  let responseData = ""
   const handleSelectedChoices = async (selectedLanguage, selectedLevel, selectedConcept) =>{
 if (selectedLanguage == null || selectedLevel == null || selectedConcept == null){
-  alert("You Must Select a Language, Level and Concept before starting!")
-  return;
+  // console.log("You Must Select a Language, Level and Concept before starting!")
+  return "error";
 }
 let question = `Give me a coding algorithm question. The coding language is ${selectedLanguage}, make the difficulty level ${selectedLevel}, and make the concept on ${selectedConcept}`
 const url = window.location.pathname + '/airesponse';
@@ -50,8 +56,9 @@ const url = window.location.pathname + '/airesponse';
       },
       body: JSON.stringify({ prompt: question}),
     });
-    const responseData = await response.json();
+    let responseData = await response.json();
     console.log(responseData)
+    setAiResponse(responseData.data)
 return responseData;
   }
 
@@ -218,11 +225,7 @@ return responseData;
         <div style={{ padding: '20px', maxHeight: '400px', overflowY: 'scroll' }}>
           <div style={{ marginBottom: '10px' }}>
             <span style={{ fontWeight: 'bold' }}>User 1:</span>
-            <div style={{ marginTop: '5px' }}>Hello, can you help me with a coding question?</div>
-          </div>
-          <div style={{ marginBottom: '10px' }}>
-            <span style={{ fontWeight: 'bold' }}>User 2:</span>
-            <div style={{ marginTop: '5px' }}>Sure! What's your question?</div>
+            <div style={{ marginTop: '5px' }}>{aiResponse}</div>
           </div>
           {/* Add more messages here */}
         </div>
@@ -234,11 +237,11 @@ return responseData;
     </div>
         </>
                   
-                 
-                  );
-                  };
+                 ); };
                   
                   export default NavBar;
+
+               
 
                
 
