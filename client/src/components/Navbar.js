@@ -1,16 +1,18 @@
 import React, { useState } from "react";
-import ChatBubble from './ChatBubble'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-const NavBar = ({code}) => {
+const NavBar = ({code, updateCodeMirrorValue}) => {
   console.log(`From Navbar: ${code}`)
   const [selectedLanguage, setSelectedLanguage] = useState(null);
   const [selectedLevel, setSelectedLevel] = useState(null);
-  const [aiResponse, setAiResponse ] = useState("hello")
+  const [aiResponse, setAiResponse ] = useState("Generate Your Question By Pressing Get Question Above!")
   const [selectedConcept, setSelectedConcept] = useState(null);
   const [showDropdownLang, setShowDropdownLang] = useState(false);
   const [showDropdownLevel, setShowDropdownLevel] = useState(false);
   const [showDropdownConcept, setShowDropdownConcept] = useState(false);
   const [savedResponse, setSavedResponse] = useState(null);
+  const [aiSolution, setAiSolution ] = useState("hi")
 
 
   const toggleDropdownLang = () => {
@@ -41,11 +43,12 @@ const NavBar = ({code}) => {
   };
 
   let choices = `${selectedLanguage} ${selectedLevel} ${selectedConcept}`
-  
+
+  //send and recieve post request to openai after selecting all required fields
   const handleSelectedChoices = async (selectedLanguage, selectedLevel, selectedConcept) =>{
-if (selectedLanguage == null || selectedLevel == null || selectedConcept == null){
-  // console.log("You Must Select a Language, Level and Concept before starting!")
-  return "error";
+    if (selectedLanguage == null || selectedLevel == null || selectedConcept == null){
+  toast("You Must Select a Language, Level and Concept before starting!");
+  return; 
 }
 let question = `Give me a coding algorithm question. The coding language is ${selectedLanguage}, make the difficulty level ${selectedLevel}, and make the concept on ${selectedConcept}`
 const url = window.location.pathname + '/airesponse';
@@ -64,9 +67,14 @@ const url = window.location.pathname + '/airesponse';
   }
 
 const sendResponse = async () =>{
-  let aiResponse = savedResponse
+  let aiResponse = savedResponse;
+  if (aiResponse === null){
+    toast("You Must Select a Language, Level and Concept before getting a response!");
+    return;
+  }
+  console.log(savedResponse)
   let userCode = `${code}`
-  let toAi = `How does my code look? The question was ${aiResponse}. and my code is ${userCode}`
+  let toAi = `How does my code look? The question was ${aiResponse}. and my code is ${userCode}. Do not tell me the complete answer but give me a hint on what I need to fix.`
   console.log(toAi);
   const url = window.location.pathname + '/airesponse';
     const response = await fetch(url, {
@@ -80,9 +88,15 @@ const sendResponse = async () =>{
     setAiResponse(responseData.data)
 }
 
-const getSolution = async () =>{
 
-  let toAi = `Can you show me the solution code. The question was ${aiResponse}. `
+const getSolution = async () =>{
+  console.log(aiResponse)
+  if (aiResponse === "Generate Your Question By Pressing Get Question Above!"){
+    toast("You Must Select a Language, Level and Concept and Generate A Question Before Recieving a Solution!");
+    return;
+  }
+
+  let toAi = `Can you show me the solution code. The question was ${aiResponse}.`
   const url = window.location.pathname + '/airesponse';
     const response = await fetch(url, {
       method: 'POST',
@@ -92,13 +106,15 @@ const getSolution = async () =>{
       body: JSON.stringify({ prompt: toAi}),
     });
     let responseData = await response.json();
-    setAiResponse(responseData.data)
-  
+    console.log(responseData)
+    const newCodeString = responseData.data.replace(/\s{3,}/g, '\n');
+      console.log(newCodeString);   
+
+
+    setAiSolution(responseData.data)
+    updateCodeMirrorValue(newCodeString)
 
 }
-
-
-  
 
   return (
     <>
@@ -148,7 +164,15 @@ const getSolution = async () =>{
                   Python
                 </a>
               </li>
-              {/* Add other language options */}
+              <li>
+                <a
+                  style={{ textDecoration: "none", color: "#fff", zIndex: "9999", cursor: "pointer" }}
+                  onClick={() => handleLanguageSelection("C++")}
+                >
+                  C++
+                </a>
+              </li>
+            
             </ul>
           )}
         </div>
@@ -195,7 +219,22 @@ const getSolution = async () =>{
                   Intermediate
                   </a>
                   </li>
-                  
+                  <li>
+                <a
+                  style={{ textDecoration : "none", color: "#fff", zIndex: "9999", cursor: "pointer" }}
+                  onClick={() => handleLevelSelection("Difficult")}
+                  >
+                  Difficult
+                  </a>
+                  </li>
+                  <li>
+                <a
+                  style={{ textDecoration : "none", color: "#fff", zIndex: "9999", cursor: "pointer" }}
+                  onClick={() => handleLevelSelection("Very Difficult")}
+                  >
+                  Very Difficult
+                  </a>
+                  </li>
                   </ul>
                   )}
                   </div>
@@ -242,7 +281,14 @@ const getSolution = async () =>{
                   Arrays
                   </a>
                   </li>
-                
+                  <li>
+                  <a
+                  style={{ textDecoration: "none", color: "#fff", zIndex: "9999", cursor: "pointer" }}
+                  onClick={() => handleConceptSelection("OOP (Object Oriented Programming)")}
+                  >
+                  OOP (Object Oriented Programming)
+                  </a>
+                  </li>
                   </ul>
                   )}
                   </div>
@@ -250,7 +296,8 @@ const getSolution = async () =>{
                   <div style={{ marginTop: "10px", color: "#fff" }}>
                   Selected Choices: {selectedLanguage} {selectedLevel} {selectedConcept}
                   <br />
-                  <button onClick={() => handleSelectedChoices(selectedLanguage, selectedLevel, selectedConcept)}>
+                  <button style={{marginLeft: '10px', padding: '8px 15px', border: 'none', backgroundColor: '#4caf50',
+           color: '#ffffff', borderRadius: '3px', cursor: 'pointer'}} onClick={() => handleSelectedChoices(selectedLanguage, selectedLevel, selectedConcept)}>
                   Get Question
                     </button>
               
@@ -263,25 +310,31 @@ const getSolution = async () =>{
         </div>
         <div style={{ padding: '20px', maxHeight: '400px', overflowY: 'scroll' }}>
           <div style={{ marginBottom: '10px' }}>
-            <span style={{ fontWeight: 'bold' }}>User 1:</span>
-            <div style={{ marginTop: '5px' }}>{aiResponse}</div>
+            <span style={{ fontWeight: 'bold' }}>Question:</span>
+            <div style={{ marginTop: '5px', overflowY: 'scroll', overflowX: 'scroll' }}>  
+              {aiResponse}
+              </div>
           </div>
           {}
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px', backgroundColor: '#f0f0f0' }}>
          
           <button style={{ marginLeft: '10px', padding: '8px 15px', border: 'none', backgroundColor: '#4caf50',
-           color: '#ffffff', borderRadius: '3px', cursor: 'pointer'}} onClick={()=> sendResponse()}> Check Code</button>
+           color: '#ffffff', borderRadius: '3px', cursor: 'pointer'}} onClick={()=> sendResponse()}> Submit Your Code</button>
            <button style={{ marginLeft: '10px', padding: '8px 15px', border: 'none', backgroundColor: '#4caf50',
            color: '#ffffff', borderRadius: '3px', cursor: 'pointer'}} onClick={()=> getSolution()}> Get Solution</button>
         </div>
       </div>
     </div>
+    <ToastContainer />
         </>
                   
                  ); };
                   
                   export default NavBar;
+
+               
+
 
                
 
