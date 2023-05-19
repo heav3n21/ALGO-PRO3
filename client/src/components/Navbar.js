@@ -41,23 +41,31 @@ const NavBar = ({code, updateCodeMirrorValue}) => {
     toggleDropdownConcept();
   };
 
+
   const handleSelectedChoices = async (selectedLanguage, selectedLevel, selectedConcept) =>{   //send and recieve post request to openai after selecting all required fields
     if (selectedLanguage == null || selectedLevel == null || selectedConcept == null){
     toast("You Must Select a Language, Level and Concept before starting!");
     return; }
     let question = `Give me a coding algorithm question. The coding language is ${selectedLanguage}, make the difficulty level ${selectedLevel}, and make the concept on ${selectedConcept}`
     const url = window.location.pathname + '/airesponse';
-    const response = await fetch(url, {
+    const response = await toast.promise(
+    fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',},
       body: JSON.stringify({ prompt: question}),
+    }),{
+      pending: `Thinking Of ${selectedLanguage} ${selectedConcept} Question 🤔`,
+      success: 'New Question!👌',
+      error: 'Error Recieving Response 🤯'
     });
     let responseData = await response.json();
     setAiResponse(responseData.data)
     setSavedResponse(responseData.data);
     return responseData; 
   }
+
+console.log(savedResponse)
 
 const sendResponse = async () =>{ //send message including user's code to check on how user did
   let aiResponse = savedResponse;
@@ -70,11 +78,16 @@ const sendResponse = async () =>{ //send message including user's code to check 
   let toAi = `How does my code look? The question was ${aiResponse}. and my code is ${userCode}. Analyze the code indept! Tell me if it is correct. If it is not correct give me a hint on hoq to fix it.`
   console.log(toAi);
   const url = window.location.pathname + '/airesponse';
-    const response = await fetch(url, {
+    const response = await toast.promise(
+    fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',},
       body: JSON.stringify({ prompt: toAi}),
+    }),{
+      pending: 'Reviewing Your Code 📄 🤔',
+      success: 'Solution Found 👌',
+      error: 'Error Recieving Response 🤯'
     });
     let responseData = await response.json();
     setAiResponse(responseData.data)
@@ -88,12 +101,18 @@ const getSolution = async () =>{ //get solution code from ai if user could not f
   }
   let toAi = `Can you show me the solution code. The question was ${aiResponse}.`
   const url = window.location.pathname + '/airesponse';
-    const response = await fetch(url, {
+    const response = await toast.promise(
+    fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ prompt: toAi}),
+    }
+    ),{
+      pending: 'Thinking of Solution 🤔',
+      success: 'Solution Found 👌',
+      error: 'Error Recieving Response 🤯'
     });
     let responseData = await response.json();
     console.log(responseData)
@@ -182,7 +201,7 @@ const getSolution = async () =>{ //get solution code from ai if user could not f
                   Selected Choices: {selectedLanguage} {selectedLevel} {selectedConcept}
                   <br />
                   <button style={{marginLeft: '10px', padding: '8px 15px', border: 'none', backgroundColor: '#4caf50',
-           color: '#ffffff', borderRadius: '3px', cursor: 'pointer'}} onClick={() => handleSelectedChoices(selectedLanguage, selectedLevel, selectedConcept)}>
+                  color: '#ffffff', borderRadius: '3px', cursor: 'pointer'}} onClick={() => handleSelectedChoices(selectedLanguage, selectedLevel, selectedConcept)}>
                   Get Question
                     </button>
                </div>
@@ -206,9 +225,12 @@ const getSolution = async () =>{ //get solution code from ai if user could not f
            <button style={{ marginLeft: '10px', padding: '8px 15px', border: 'none', backgroundColor: '#4caf50',
            color: '#ffffff', borderRadius: '3px', cursor: 'pointer'}} onClick={()=> getSolution()}> Get Solution</button>
         </div>
+        
       </div>
     </div>
     <ToastContainer />
         </>  ); };
        export default NavBar;
+
+               
 
