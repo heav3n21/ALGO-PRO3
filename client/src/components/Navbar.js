@@ -3,11 +3,11 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const NavBar = ({code, updateCodeMirrorValue}) => {
-  console.log(`From Navbar: ${code}`)
   const [selectedLanguage, setSelectedLanguage] = useState(null);
   const [selectedLevel, setSelectedLevel] = useState(null);
-  const [aiResponse, setAiResponse ] = useState("Generate Your Question By Pressing Get Question Above!")
+  const [aiResponse, setAiResponse ] = useState("Generate Your Question By Pressing Get Question Above!");
   const [selectedConcept, setSelectedConcept] = useState(null);
+  const [aiCheckingWork, setAiCheckingWork] = useState(null)
   const [showDropdownLang, setShowDropdownLang] = useState(false);
   const [showDropdownLevel, setShowDropdownLevel] = useState(false);
   const [showDropdownConcept, setShowDropdownConcept] = useState(false);
@@ -41,12 +41,12 @@ const NavBar = ({code, updateCodeMirrorValue}) => {
     toggleDropdownConcept();
   };
 
-
   const handleSelectedChoices = async (selectedLanguage, selectedLevel, selectedConcept) =>{   //send and recieve post request to openai after selecting all required fields
     if (selectedLanguage == null || selectedLevel == null || selectedConcept == null){
     toast("You Must Select a Language, Level and Concept before starting!");
     return; }
-    let question = `Give me a coding algorithm question. The coding language is ${selectedLanguage}, make the difficulty level ${selectedLevel}, and make the concept on ${selectedConcept}`
+    let question = `Give me a coding algorithm question. The coding language is ${selectedLanguage}, make the difficulty level ${selectedLevel}, and make the concept on ${selectedConcept}. Give me starting data to work with but DO NOT show me how to solve it yet.`
+    console.log(question)
     const url = window.location.pathname + '/airesponse';
     const response = await toast.promise(
     fetch(url, {
@@ -62,10 +62,10 @@ const NavBar = ({code, updateCodeMirrorValue}) => {
     let responseData = await response.json();
     setAiResponse(responseData.data)
     setSavedResponse(responseData.data);
+    setAiCheckingWork(null) 
     return responseData; 
+  
   }
-
-console.log(savedResponse)
 
 const sendResponse = async () =>{ //send message including user's code to check on how user did
   let aiResponse = savedResponse;
@@ -75,7 +75,7 @@ const sendResponse = async () =>{ //send message including user's code to check 
   }
   console.log(savedResponse)
   let userCode = `${code}`
-  let toAi = `How does my code look? The question was ${aiResponse}. and my code is ${userCode}. Analyze the code indept! Tell me if it is correct. If it is not correct give me a hint on hoq to fix it.`
+  let toAi = `How does my code look? The question I was asked is here in quotes: "${aiResponse}". and my code is here in quotes: "${userCode}"... Analyze the code indept and the question! Tell me if the solution code answers the question in the correct language. If it is not correct give me a hint on how i would solve it but do not show me the full solution.`
   console.log(toAi);
   const url = window.location.pathname + '/airesponse';
     const response = await toast.promise(
@@ -86,20 +86,21 @@ const sendResponse = async () =>{ //send message including user's code to check 
       body: JSON.stringify({ prompt: toAi}),
     }),{
       pending: 'Reviewing Your Code 📄 🤔',
-      success: 'Solution Found 👌',
+      success: 'Reviewed 🤓',
       error: 'Error Recieving Response 🤯'
     });
     let responseData = await response.json();
-    setAiResponse(responseData.data)
+    setAiCheckingWork(responseData.data) //set chat to aiResponse
   }
 
-const getSolution = async () =>{ //get solution code from ai if user could not figure it out
+const getSolution = async (selectedLanguage) =>{ //get solution code from ai if user could not figure it out
   console.log(aiResponse)
   if (aiResponse === "Generate Your Question By Pressing Get Question Above!"){
     toast("You Must Select a Language, Level and Concept and Generate A Question Before Recieving a Solution!");
     return;
   }
-  let toAi = `Can you show me the solution code. The question was ${aiResponse}.`
+  let toAi = `Can you show me the solution code. The question was ${aiResponse}. The programming language is ${selectedLanguage}`
+  console.log(toAi)
   const url = window.location.pathname + '/airesponse';
     const response = await toast.promise(
     fetch(url, {
@@ -116,7 +117,7 @@ const getSolution = async () =>{ //get solution code from ai if user could not f
     });
     let responseData = await response.json();
     console.log(responseData)
-    const newCodeString = responseData.data.replace(/\s{3,}/g, '\n');
+    const newCodeString = responseData.data.replace(/\s{2,}/g, '\n');
       console.log(newCodeString);   
     setAiSolution(responseData.data)
     updateCodeMirrorValue(newCodeString)
@@ -184,11 +185,19 @@ const getSolution = async () =>{ //get solution code from ai if user could not f
                   top: "100%",left: "0", zIndex: "9999",}}>
                   <li>
                   <a style={{ textDecoration: "none", color: "#fff", zIndex: "9999", cursor: "pointer" }}
-                  onClick={() => handleConceptSelection("Functions")}>Functions</a>
+                  onClick={() => handleConceptSelection("Functions")}>Functional Programming</a>
                   </li>
                   <li>
                   <a style={{ textDecoration: "none", color: "#fff", zIndex: "9999", cursor: "pointer" }}
                   onClick={() => handleConceptSelection("Arrays")}>Arrays</a>
+                  </li>
+                  <li>
+                  <a style={{ textDecoration: "none", color: "#fff", zIndex: "9999", cursor: "pointer" }}
+                  onClick={() => handleConceptSelection("Arrays")}>Strings</a>
+                  </li>
+                  <li>
+                  <a style={{ textDecoration: "none", color: "#fff", zIndex: "9999", cursor: "pointer" }}
+                  onClick={() => handleConceptSelection("Regular Expressions")}>Regular Expressions</a>
                   </li>
                   <li>
                   <a style={{ textDecoration: "none", color: "#fff", zIndex: "9999", cursor: "pointer" }}
@@ -217,13 +226,16 @@ const getSolution = async () =>{ //get solution code from ai if user could not f
             <div style={{ marginTop: '5px', overflowY: 'scroll', overflowX: 'scroll' }}>  
               {aiResponse}
               </div>
+              <div style={{ marginTop: '5px', overflowY: 'scroll', overflowX: 'scroll' }}>  
+              {aiCheckingWork}
+              </div>
           </div>
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px', backgroundColor: '#f0f0f0' }}>
           <button style={{ marginLeft: '10px', padding: '8px 15px', border: 'none', backgroundColor: '#4caf50',
            color: '#ffffff', borderRadius: '3px', cursor: 'pointer'}} onClick={()=> sendResponse()}> Submit Your Code</button>
            <button style={{ marginLeft: '10px', padding: '8px 15px', border: 'none', backgroundColor: '#4caf50',
-           color: '#ffffff', borderRadius: '3px', cursor: 'pointer'}} onClick={()=> getSolution()}> Get Solution</button>
+           color: '#ffffff', borderRadius: '3px', cursor: 'pointer'}} onClick={()=> getSolution(selectedLanguage)}> Get Solution</button>
         </div>
         
       </div>
@@ -231,6 +243,7 @@ const getSolution = async () =>{ //get solution code from ai if user could not f
     <ToastContainer />
         </>  ); };
        export default NavBar;
+
 
                
 
