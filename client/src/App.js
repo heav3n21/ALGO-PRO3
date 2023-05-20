@@ -1,10 +1,33 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Navbar from "./components/Navbar";
+import FilePages from './pages/SavedWork'
 import Homepage from "./pages/Homepage";
 import Footer from "./components/Footer";
 import CHAT from "../src/components/CHAT";
-
+import Login from "./pages/Loginpage"
+import { setContext } from "@apollo/client/link/context"
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { ApolloClient, ApolloProvider, InMemoryCache, createHttpLink } from "@apollo/client";
+import Auth from "./utils/auth"
+const httpLink = createHttpLink({
+  uri: '/graphql',
+});
+const authLink = setContext((_, { headers }) => {
+  // get the authentication token from local storage if it exists
+  const token = localStorage.getItem('id_token');
+  // return the headers to the context so httpLink can read them
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : '',
+    },
+  };
+});
+const client = new ApolloClient({
+  // Set up our client to execute the `authLink` middleware prior to making the request to our GraphQL API
+  link: authLink.concat(httpLink),
+  cache: new InMemoryCache(),
+});
 function App() {
   return (
     <Router>
@@ -33,6 +56,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Homepage />} />
         <Route path="/chat" element={<CHAT />} />
+        <Route path="/files" element={<FilePages />} />
         {/* <Route path="/login" element={<Login />} /> */}
 
       </Routes>
@@ -41,3 +65,4 @@ function App() {
 }
 
 export default App;
+
