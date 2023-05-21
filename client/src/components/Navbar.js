@@ -1,8 +1,13 @@
 import React, { useState } from "react";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import GIFpeople from "../images/original (1).webp"
+import { SAVE_WORK, ADD_USER } from "../utils/mutations";
+import Auth from '../utils/auth'
+import { useMutation } from "@apollo/client";
 
-const NavBar = ({code, updateCodeMirrorValue}) => {
+const NavBar = ({code, updateCodeMirrorValue, sendToParent}) => {
+  const [saveWork, {loading}] = useMutation(SAVE_WORK);
   const [selectedLanguage, setSelectedLanguage] = useState(null);
   const [selectedLevel, setSelectedLevel] = useState(null);
   const [aiResponse, setAiResponse ] = useState("Generate Your Question By Pressing Get Question Above!");
@@ -13,6 +18,11 @@ const NavBar = ({code, updateCodeMirrorValue}) => {
   const [showDropdownConcept, setShowDropdownConcept] = useState(false);
   const [savedResponse, setSavedResponse] = useState(null);
   const [aiSolution, setAiSolution ] = useState(null)
+  const [files, setFiles] = useState([])
+  const [saveButton, setSaveButton] = useState(null)
+
+  const token = Auth.loggedIn() ? Auth.getToken() : null;
+  console.log(token)
 
   const toggleDropdownLang = () => {
     setShowDropdownLang(!showDropdownLang); // drop down menu to toggle languages
@@ -63,6 +73,7 @@ const NavBar = ({code, updateCodeMirrorValue}) => {
     setAiResponse(responseData.data)
     setSavedResponse(responseData.data);
     setAiCheckingWork(null) 
+    setSaveButton(null)
     return responseData; 
   
   }
@@ -120,7 +131,38 @@ const getSolution = async (selectedLanguage) =>{ //get solution code from ai if 
     const newCodeString = responseData.data.replace(/\s{2,}/g, '\n');
       console.log(newCodeString);   
     setAiSolution(responseData.data)
+    setSaveButton(<button style={{ marginLeft: '10px', padding: '8px 15px', border: 'none', backgroundColor: '#4caf50',
+    color: '#ffffff', borderRadius: '3px', cursor: 'pointer'}} onClick={()=> saveFile()}> Save Algorithm Solution</button>)
     updateCodeMirrorValue(newCodeString)
+}
+
+const saveFile = async ()=>{
+try{
+const question = `// ${aiResponse}`
+//console.log(question)
+let solution = document.querySelector(".cm-content").innerText;
+let files = question + '\n' + `${solution}`;
+setFiles(files)
+sendToParent(files)
+
+if (!token) {
+  return false;
+}
+
+const {data} = await saveWork({
+
+    variables: { solutionData: {
+      question: question,
+      solution: solution
+    }}
+  }
+)
+
+console.log(data)
+}catch(err){
+console.error.apply(err)
+}
+
 }
   return (
     <>
@@ -236,6 +278,7 @@ const getSolution = async (selectedLanguage) =>{ //get solution code from ai if 
            color: '#ffffff', borderRadius: '3px', cursor: 'pointer'}} onClick={()=> sendResponse()}> Submit Your Code</button>
            <button style={{ marginLeft: '10px', padding: '8px 15px', border: 'none', backgroundColor: '#4caf50',
            color: '#ffffff', borderRadius: '3px', cursor: 'pointer'}} onClick={()=> getSolution(selectedLanguage)}> Get Solution</button>
+           {saveButton}
         </div>
         
       </div>
@@ -243,6 +286,8 @@ const getSolution = async (selectedLanguage) =>{ //get solution code from ai if 
     <ToastContainer />
         </>  ); };
        export default NavBar;
+
+               
 
 
                
