@@ -1,8 +1,64 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { FiFile } from 'react-icons/fi';
+import { QUERY_FILES } from '../utils/queries'
+import { useQuery} from "@apollo/client";
+import Auth from '../utils/auth'
 
-const FilesPage = () => {
-  const files = [
+const FilesPage = ({ files}) => {
+    //console.log(files)
+    const token = Auth.loggedIn() ? Auth.getToken() : null;
+    let profile = Auth.getProfile();
+    let userId = profile.data._id
+    console.log(userId)
+    
+    
+    //console.log(Auth.getProfile())
+    
+    
+    const { loading, error, data } = useQuery(QUERY_FILES, {
+      variables: {
+        _id: userId,
+      },
+    });
+    
+    if (loading) {
+      // Handle loading state
+      console.log("loooaddddingg!!!")
+    }
+    
+    if (error) {
+      // Handle error state
+      console.log("NNOOOOOOO!!")
+    }
+
+
+  console.log({data})
+
+
+
+  
+    console.log(JSON.stringify(data));
+
+    if (!token) {
+      return false;
+    }
+    
+    
+    
+    
+    
+    
+    // const { loading, error, data } = useQuery(QUERY_FILES);
+    //console.log(token)
+    // console.log(JSON.stringify(data))
+
+    if (!token) {
+      return false;
+    }
+    
+
+    
+  const fileNames = [
     'file1.txt',
     'file2.txt',
     'file3.txt',
@@ -46,7 +102,7 @@ const FilesPage = () => {
         >
           My Files
         </h1>
-        {files.length > 0 ? (
+        {fileNames.length > 0 ? (
           <ul
             style={{
               listStyleType: 'none',
@@ -54,7 +110,7 @@ const FilesPage = () => {
               padding: 0,
             }}
           >
-            {files.map((file, index) => (
+            {fileNames.map((file, index) => (
               <li
                 key={index}
                 style={{
@@ -99,3 +155,4 @@ const FilesPage = () => {
 };
 
 export default FilesPage;
+
