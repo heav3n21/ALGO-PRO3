@@ -5,7 +5,20 @@ type User {
     _id: ID!
     username: String
     email:String
+    password: String
 }
+
+type Work{
+    _id: ID
+    question: String
+    solution: String
+}
+
+input WorkInput{
+    question: String
+    solution: String
+}
+
 type Auth{
     token:ID!
     user:User
@@ -14,8 +27,9 @@ type Query{
    user:[User] 
 }
 type Mutation{
-    addUser( email:String!, password:String!):Auth
+    addUser( email:String!, password:String!, username: String):Auth
     login(email:String!,password:String!):Auth
+    saveWork(solutionData: WorkInput!): User
 }
 
 `
