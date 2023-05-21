@@ -5,7 +5,19 @@ const { signToken } = require('../utils/auth');
 
 
 const resolvers = {
-    Query: {
+    Query: { 
+        async savedFiles(parent, _, context){
+               if (context){
+      
+            const user = await User.findById(context.user._id) 
+            console.log(user)
+            return user ;
+ 
+         } else {
+            throw new AuthenticationError('You need to be logged in!');
+
+            }
+         }
 
     },
     Mutation: {
