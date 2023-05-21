@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { ApolloClient, ApolloProvider, InMemoryCache, createHttpLink } from "@apollo/client";
 import Navbar from "./components/Navbar";
 import FilePages from './pages/SavedWork'
 import Homepage from "./pages/Homepage";
@@ -7,7 +8,6 @@ import CHAT from "../src/components/CHAT";
 import Login from "./pages/Loginpage"
 import { setContext } from "@apollo/client/link/context"
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import { ApolloClient, ApolloProvider, InMemoryCache, createHttpLink } from "@apollo/client";
 import Auth from "./utils/auth"
 const httpLink = createHttpLink({
   uri: '/graphql',
@@ -29,7 +29,12 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 function App() {
+  const [files, setFiles] = useState([]);
+  const updateFiles = (newFiles) => {
+    setFiles(newFiles);
+  };
   return (
+    <ApolloProvider client={client}>
     <Router>
       <nav>
       <div className="flex justify-between items-center h-24 max-w-[100%] mx-auto px-4 text-white  nav--bar">
@@ -42,6 +47,7 @@ function App() {
             <Link className="p-4">LOGIN</Link>
                 <Link className="p-4" to="/chat">CHALLENGE</Link>
               <Link className="p-4">CONTACT</Link>
+              <Link className="p-4" to='/files'>FILES</Link>
           </li>
         </ul>
         {/* <div onClick={handleNav} className="block md:hidden">
@@ -55,12 +61,14 @@ function App() {
 
       <Routes>
         <Route path="/" element={<Homepage />} />
-        <Route path="/chat" element={<CHAT />} />
-        <Route path="/files" element={<FilePages />} />
-        {/* <Route path="/login" element={<Login />} /> */}
+        <Route path="/chat" element={<CHAT files={files} />}
+        />
+        <Route path="/files" element={<FilePages files={files} updateFiles={updateFiles} />}/>
+        <Route path="/login" element={<Login />} />
 
       </Routes>
     </Router>
+    </ApolloProvider>
   );
 }
 
