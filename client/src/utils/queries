@@ -1,0 +1,12 @@
+import { gql } from '@apollo/client';
+
+export const QUERY_FILES = gql`
+  query savedFiles($_id: ID) {
+    savedFiles(_id: $_id) {
+      savedWork {
+        question
+        solution
+      }
+    }
+  }
+`;
