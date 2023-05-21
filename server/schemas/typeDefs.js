@@ -6,6 +6,7 @@ type User {
     username: String
     email:String
     password: String
+    savedWork: [Work]
 }
 
 type Work{
@@ -24,7 +25,8 @@ type Auth{
     user:User
 }
 type Query{
-   user:[User] 
+   user: User
+   savedFiles(_id: ID): User
 }
 type Mutation{
     addUser( email:String!, password:String!, username: String):Auth
