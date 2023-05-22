@@ -6,6 +6,11 @@ import Login from "./pages/Loginpage"
 import { setContext } from "@apollo/client/link/context"
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ApolloClient, ApolloProvider, InMemoryCache, createHttpLink } from "@apollo/client";
+
+import ChatRoomPage from "./pages/ChatRoomPage";
+import CommunityPage from "./pages/CommunityPage.js";
+import Creators from "./pages/Creators";
+import Profile from "./pages/Profile";
 const httpLink = createHttpLink({
   uri: '/graphql',
 });
@@ -35,7 +40,10 @@ function App() {
           <Routes>
             <Route exact path="/" element={<Homepage />} />
             <Route exact path="/login" element={<Login />} />
-
+            <Route exact path="/CommunityChat" element={<CommunityPage/>}/>
+            <Route exact path="/Creators" element = {<Creators/>}/>
+            <Route exact path="/ChatRoom" element = {<ChatRoomPage/>}/>
+            <Route exact path="/profile" element = {<Profile/>}/>
           </Routes>
           <Footer />
         </div>

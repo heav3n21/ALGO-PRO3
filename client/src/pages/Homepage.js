@@ -1,7 +1,8 @@
 import React from "react";
 import { motion } from "framer-motion"
+
 import IMGprogammer from "../images/programmer.png"
-import PNGcomputer from "../images/computer-programming-web-development-computer-software-programming-language-theme-coder-d6c1028a0fd807e67bf049986ccd5b8b.png"
+import PNGcomputer from "../images/giphy.gif"
 function Homepage() {
 
 
@@ -22,7 +23,7 @@ function Homepage() {
                     </p>
 
                 </div>
-                <button className=" rounded-md font-semibold py-3 shadow--css w-[200px] mt-4 text-black bg--container--cyan" > Get Started coding</button>
+                <motion.button whileHover={{scale: 1.1, textShadow:'0px 0px 8px rgb(235,255,255)', boxShadow:'0px 0px 8px rgb(255,255,255)', transition: { type: 'tween', duration: 4 }}} className=" rounded-md font-semibold py-3 shadow--css w-[200px] mt-4 text-black bg--container--cyan" > Get Started coding</motion.button>
             </motion.div>
             <div className="w-full py-14 px-4">
                 <div className="max-w-[1240px] mx-auto grid md:grid-cols-2">
@@ -48,7 +49,7 @@ function Homepage() {
                                   skills in a comfortable and familiar environment. Join us today and embark on a journey of algorithmic mastery, unlocking your coding potential like never before!</p>
                         </div>
 
-                        <img className="sm:hidden md:block mx-auto my-4" src={PNGcomputer} alt="/" />
+                        <img className="sm:hidden md:block mx-auto my-4 rounded-lg" src={PNGcomputer} alt="/" />
                     </div>
 
                 </div>
