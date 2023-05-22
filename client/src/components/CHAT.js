@@ -5,7 +5,7 @@ import { javascript } from '@codemirror/lang-javascript';
 import { tags as t } from '@lezer/highlight';
 import Login from '../pages/Loginpage'
 import '../css/monokai.css';
-import NavBar from './Navbar'
+import AiNavBar from './AiNavbar'
 import AiQuestion from './AIQuestion'
 import Auth from "../utils/auth"
 
@@ -69,7 +69,7 @@ export default function Chat({ files, sendToApp }){
  
 return(
 <>
-<NavBar code={code} updateCodeMirrorValue={updateCodeMirrorValue} sendToParent={handleFromChild} setFiles={handleSetFiles} />
+<AiNavBar code={code} updateCodeMirrorValue={updateCodeMirrorValue} sendToParent={handleFromChild} setFiles={handleSetFiles} />
 
 <CodeMirror style={{width: '100%'}}
       value={code}
