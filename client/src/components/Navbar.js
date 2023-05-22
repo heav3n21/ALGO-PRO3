@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { ToastContainer, toast } from 'react-toastify';
+import { useQuery} from "@apollo/client";
+import { QUERY_FILES } from '../utils/queries'
 import 'react-toastify/dist/ReactToastify.css';
 import GIFpeople from "../images/original (1).webp"
 import { SAVE_WORK} from "../utils/mutations";
@@ -7,8 +9,8 @@ import Auth from '../utils/auth'
 import { useMutation } from "@apollo/client";
 import Login from '../pages/Loginpage.js'
 
-const NavBar = ({code, updateCodeMirrorValue, sendToParent}) => {
-  const [saveWork, {loading}] = useMutation(SAVE_WORK);
+const NavBar = ({code, updateCodeMirrorValue, sendToParent, setFiles}) => {
+  const [saveWork, {loading}] = useMutation(SAVE_WORK,{ refetchQueries: [QUERY_FILES],});
   const [selectedLanguage, setSelectedLanguage] = useState(null);
   const [selectedLevel, setSelectedLevel] = useState(null);
   const [aiResponse, setAiResponse ] = useState("Generate Your Question By Pressing Get Question Above!");
@@ -19,7 +21,7 @@ const NavBar = ({code, updateCodeMirrorValue, sendToParent}) => {
   const [showDropdownConcept, setShowDropdownConcept] = useState(false);
   const [savedResponse, setSavedResponse] = useState(null);
   const [aiSolution, setAiSolution ] = useState(null)
-  const [files, setFiles] = useState([])
+  //const [files, setFiles] = useState([])
   const [saveButton, setSaveButton] = useState(null)
   const token = Auth.loggedIn() ? Auth.getToken() : null;
 
@@ -106,13 +108,13 @@ const sendResponse = async () =>{ //send message including user's code to check 
   }
 
 const getSolution = async (selectedLanguage) =>{ //get solution code from ai if user could not figure it out
-  console.log(aiResponse)
+  //console.log(aiResponse)
   if (aiResponse === "Generate Your Question By Pressing Get Question Above!"){
     toast("You Must Select a Language, Level and Concept and Generate A Question Before Recieving a Solution!");
     return;
   }
   let toAi = `Can you show me the solution code. The question was ${aiResponse}. The programming language is ${selectedLanguage}`
-  console.log(toAi)
+  //console.log(toAi)
   const url = window.location.pathname + '/airesponse';
     const response = await toast.promise(
     fetch(url, {
@@ -128,22 +130,22 @@ const getSolution = async (selectedLanguage) =>{ //get solution code from ai if 
       error: 'Error Recieving Response 🤯'
     });
     let responseData = await response.json();
-    console.log(responseData)
+    //console.log(responseData)
     const newCodeString = responseData.data.replace(/\s{2,}/g, '\n');
-      console.log(newCodeString);   
+      //console.log(newCodeString);   
     setAiSolution(responseData.data)
     setSaveButton(<button style={{ marginLeft: '10px', padding: '8px 15px', border: 'none', backgroundColor: '#4caf50',
     color: '#ffffff', borderRadius: '3px', cursor: 'pointer'}} onClick={()=> saveFile()}> Save Algorithm Solution</button>)
     updateCodeMirrorValue(newCodeString)
 }
 
+setFiles("filesssssss")
 const saveFile = async ()=>{
 try{
 const question = `${aiResponse}`
 let solution = document.querySelector(".cm-content").innerText;
 let files = question + '\n' + `${solution}`;
-setFiles(files)
-sendToParent(files)
+sendToParent("wazzup")
 const {data} = await saveWork({
   variables: { solutionData: {
     question: question,
@@ -275,3 +277,5 @@ return (
     <ToastContainer />
         </>  ); };
        export default NavBar;
+
+               
