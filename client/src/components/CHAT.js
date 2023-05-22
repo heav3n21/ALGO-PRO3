@@ -3,9 +3,11 @@ import CodeMirror from '@uiw/react-codemirror';
 import { createTheme } from '@uiw/codemirror-themes';
 import { javascript } from '@codemirror/lang-javascript';
 import { tags as t } from '@lezer/highlight';
+import Login from '../pages/Loginpage'
 import '../css/monokai.css';
 import NavBar from './Navbar'
 import AiQuestion from './AIQuestion'
+import Auth from "../utils/auth"
 
 
 const myTheme = createTheme({
@@ -38,6 +40,13 @@ const myTheme = createTheme({
   
 export default function Chat({ files, sendToApp }){
   const [code, setCode] = useState("console.log('Type your solution here');");
+  const token = Auth.loggedIn() ? Auth.getToken() : null;
+
+  if(!token){ // if no jwt token then return user to login page
+    return <Login />;
+    
+  };
+
   const handleCodeChange = (value, viewUpdate) => {
     setCode(value);
   };
