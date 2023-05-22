@@ -9,7 +9,7 @@ import Auth from '../utils/auth'
 import { useMutation } from "@apollo/client";
 import Login from '../pages/Loginpage.js'
 
-const NavBar = ({code, updateCodeMirrorValue, sendToParent, setFiles}) => {
+const AiNavBar = ({code, updateCodeMirrorValue, sendToParent, setFiles}) => {
   const [saveWork, {loading}] = useMutation(SAVE_WORK,{ refetchQueries: [QUERY_FILES],});
   const [selectedLanguage, setSelectedLanguage] = useState(null);
   const [selectedLevel, setSelectedLevel] = useState(null);
@@ -52,9 +52,7 @@ const NavBar = ({code, updateCodeMirrorValue, sendToParent, setFiles}) => {
     toggleDropdownConcept();
   };
   
-  if(!token){ // if no jwt token then return user to login page
-      return <Login />
-    };
+  
   const handleSelectedChoices = async (selectedLanguage, selectedLevel, selectedConcept) =>{   //send and recieve post request to openai after selecting all required fields
     if (selectedLanguage == null || selectedLevel == null || selectedConcept == null){
       toast("You Must Select a Language, Level and Concept before starting!");
@@ -276,6 +274,9 @@ return (
     </div>
     <ToastContainer />
         </>  ); };
-       export default NavBar;
+       export default AiNavBar;
+
+               
+
 
                
