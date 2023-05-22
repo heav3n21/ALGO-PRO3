@@ -3,36 +3,43 @@ import { FiFile } from 'react-icons/fi';
 import { QUERY_FILES } from '../utils/queries'
 import { useQuery} from "@apollo/client";
 import Auth from '../utils/auth'
+import { useMutation } from "@apollo/client";
+import { REMOVE_WORK } from '../utils/mutations'
 
 const FilesPage = ({ files}) => {
-
- const token = Auth.loggedIn() ? Auth.getToken() : null;
-     let profile = Auth.getProfile();
-     let userId = profile.data._id
-   //console.log(userId)
+  const [update, setUpdate] = useState('')
+  
+  const token = Auth.loggedIn() ? Auth.getToken() : null;
+  let profile = Auth.getProfile();
+  let userId = profile.data._id
+  //console.log(userId)
+  
+  
+  //console.log(Auth.getProfile())
+  
+  
+  const { loading, error, data } = useQuery(QUERY_FILES, {
+    variables: {
+      _id: userId,
+    },
+  });
+  
+  
+  
+  
+  if(loading === false){
+    //console.log(data, loading)
+    let savedWork = data.savedFiles.savedWork;
+    console.log(data)
     
-    
-    //console.log(Auth.getProfile())
-    
-    
-    const { loading, error, data } = useQuery(QUERY_FILES, {
-      variables: {
-        _id: userId,
-      },
-    });
-
-    
-    if(loading === false){
-      //console.log(data, loading)
-      let savedWork = data.savedFiles.savedWork;
-      console.log([savedWork])
   }
-if (error) {
-      // Handle error state
-      console.error(error)
-    }
-
-
+  if (error) {
+    // Handle error state
+    console.error(error)
+  }
+  
+  const [removeWork, {load}] = useMutation(REMOVE_WORK);
+  
 const downloadFile = (e) =>{
   const currentDate = new Date();
 const uniqueNumber = currentDate.getTime();
@@ -49,17 +56,25 @@ URL.revokeObjectURL(element.href);
 
 }
 
+
+const deleteFile = async (e)=>{
+  const toDelete = e.target.parentElement.parentElement.id;
+  console.log(toDelete)
+  const {data} = await removeWork({
+    variables: { _id: userId, id: toDelete}})
+    setUpdate(' ')
+}
+const hasFiles = data && data.savedFiles && data.savedFiles.savedWork.length > 0;
+
   return (
     <div
       style={{
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-       // height: '100vh',
+       //height: '100vh',
         backgroundColor: '#f6f8fa',
-      }}
-    >
-      {/* {fetchFiles} */}
+      }}>
       <div
       id={'files'}
         style={{
@@ -89,53 +104,68 @@ URL.revokeObjectURL(element.href);
               listStyleType: 'none',
               margin: 0,
               padding: 0,
-            }}
-          >
-            {/* {JSON.stringify(data.savedFiles.savedWork[1])} */}
+            }}>
 
             { data.savedFiles.savedWork.map((file, index) => {
           let question = file.question;
           let solution = file.solution;
-  
-  return (
-    <div key={index}>
-    <li
+      return (
+        <div id={index} key={index}
+          style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', marginBottom: '20px',
+          padding: '10px', backgroundColor: '#f2f2f2', borderRadius: '6px', textAlign: 'center', minHeight: '100px',wordWrap: 'break-word',
+          overflowWrap: 'break-word', overflow: 'auto', fontSize: '16px', '@media (minWidth: 768px)': { fontSize: '18px', // Adjust font size for screens larger than 768px
+                    },
+                '@media (maxWidth: 480px)': {
+                  fontSize: '14px', // Adjust font size for screens smaller than 480px 
+                              },}}>
+                <li>
+                  <div style={{ flex: 1 }}>
+                    <p
+                      style={{
+                        marginBottom: '10px',
+                        whiteSpace: 'pre-wrap',
+                        wordBreak: 'break-word',
+                      }}
+                    >
+                      {question}
+                    </p>
+                    <pre style={{ whiteSpace: 'pre-wrap', margin: 0, wordBreak: 'break-word' }}>
+                      {solution}
+                    </pre>
+                  </div>
+                  <div style={{ marginTop: 'auto', display: 'flex', gap: '10px' }}>
+                    <button
+                      style={{
+                        padding: '8px 15px',
+                        border: 'none',
+                        backgroundColor: '#4caf50',
+                        color: '#ffffff',
+                        borderRadius: '3px',
+                        cursor: 'pointer',
+                      }}
+                      onClick={downloadFile}
+                    >
+                      Download
+                    </button>
 
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        marginBottom: '20px',
-        padding: '10px',
-        backgroundColor: '#f2f2f2',
-        borderRadius: '6px',
-      }}
-    >
-      <div style={{ flex: 1 }}>
-     
-        <p style={{ marginBottom: '10px' }}>{question}</p>
-        
-    
-       <pre> <p>{solution}</p></pre>
-      </div>
-      
-      <button
-        style={{
-          marginLeft: '20px',
-          padding: '8px 15px',
-          border: 'none',
-          backgroundColor: '#4caf50',
-          color: '#ffffff',
-          borderRadius: '3px',
-          cursor: 'pointer',
-        }} onClick={downloadFile}
-      >
-        Download
-      </button>
-    </li>
-    </div>
-  );
-})}
-
+                    <button
+                      style={{
+                        padding: '8px 15px',
+                        border: 'none',
+                        backgroundColor: '#4caf50',
+                        color: '#ffffff',
+                        borderRadius: '3px',
+                        cursor: 'pointer',
+                      }}
+                      onClick={deleteFile}
+                    >
+                      DELETE
+                    </button>
+                  </div>
+                </li>
+              </div>
+          );
+        })}
           </ul>
         ) : (
           <p
@@ -146,14 +176,26 @@ URL.revokeObjectURL(element.href);
               color: '#999',
             }}
           >
-           No files found
+           Loading Files..
           </p>
         )}
+
+{!hasFiles ? (
+     <div
+     style={{
+       display: 'flex',
+       justifyContent: 'center',
+       alignItems: 'center',
+      height: '100vh',
+       backgroundColor: '#f6f8fa',
+     }}>
+  <p>No Saved Files Yet</p>
+  </div>
+) : null}
       </div>
     </div>
   );
 };
 
 export default FilesPage;
-
 
