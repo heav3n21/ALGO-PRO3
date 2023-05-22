@@ -10,8 +10,8 @@ const resolvers = {
                if (context){
       
             const user = await User.findById(context.user._id) 
-            console.log(user)
-            return user ;
+            //console.log(user)
+            return user;
  
          } else {
             throw new AuthenticationError('You need to be logged in!');
@@ -52,6 +52,20 @@ const resolvers = {
                     { $push: { savedWork : solutionData}}, 
                     {new: true});
                     return user;
+
+            } else {
+                throw new AuthenticationError('You need to be logged in!');
+              }
+
+        }, 
+        async removeWork(parent,{id}, context) {
+             if(context){        
+        let workIndexToRemove = context.body.variables.id
+            let filter = {_id: context.user._id }  
+           const user = await User.findOne(filter)
+           const savedWork = user.savedWork
+           savedWork.splice(workIndexToRemove, 1)
+           user.save()
 
             } else {
                 throw new AuthenticationError('You need to be logged in!');
