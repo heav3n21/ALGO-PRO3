@@ -7,11 +7,11 @@ import { useMutation } from "@apollo/client";
 import { REMOVE_WORK } from '../utils/mutations'
 import Login from './Loginpage'
 
-const FilesPage = ({ files}) => {
-  
-  const token = Auth.loggedIn() ? Auth.getToken() : null;
+const FilesPage = ({ files, handle}) => {
+  console.log(`From SavedWork ${files}`)
+  console.log(handle)
 
- 
+  const token = Auth.loggedIn() ? Auth.getToken() : null;
   let profile = Auth.getProfile();
   let userId = profile.data._id
   const { loading, error, data, refetch } = useQuery(QUERY_FILES, {
