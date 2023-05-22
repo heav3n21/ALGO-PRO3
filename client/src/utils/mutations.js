@@ -33,7 +33,16 @@ mutation saveWork($solutionData: WorkInput!){
         username
     }
 }
-
 `
+
+export const REMOVE_WORK = gql`
+mutation removeWork($id: ID){
+    removeWork(_id: $id){
+        username
+    }
+}`
+
+
+
 
 
