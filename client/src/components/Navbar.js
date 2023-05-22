@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import GIFpeople from "../images/original (1).webp"
-import { SAVE_WORK, ADD_USER } from "../utils/mutations";
+import { SAVE_WORK} from "../utils/mutations";
 import Auth from '../utils/auth'
 import { useMutation } from "@apollo/client";
+import Login from '../pages/Loginpage.js'
 
 const NavBar = ({code, updateCodeMirrorValue, sendToParent}) => {
   const [saveWork, {loading}] = useMutation(SAVE_WORK);
@@ -20,50 +21,51 @@ const NavBar = ({code, updateCodeMirrorValue, sendToParent}) => {
   const [aiSolution, setAiSolution ] = useState(null)
   const [files, setFiles] = useState([])
   const [saveButton, setSaveButton] = useState(null)
-
   const token = Auth.loggedIn() ? Auth.getToken() : null;
-  console.log(token)
 
   const toggleDropdownLang = () => {
     setShowDropdownLang(!showDropdownLang); // drop down menu to toggle languages
   };
-
+  
   const toggleDropdownLevel = () => {
     setShowDropdownLevel(!showDropdownLevel); //drop down menu to toggle difficulty level
   };
-
+  
   const toggleDropdownConcept = () => {
     setShowDropdownConcept(!showDropdownConcept); // drop down menu to toggle concept
   };
-
+  
   const handleLanguageSelection = (language) => {
     setSelectedLanguage(language === selectedLanguage ? null : language); //if language is selected change state of drop down menu
     toggleDropdownLang();
   };
-
+  
   const handleLevelSelection = (level) => {
     setSelectedLevel(level === selectedLevel ? null : level); // if diffculty level is selected change state of drop down menu
     toggleDropdownLevel();
   };
-
+  
   const handleConceptSelection = (concept) => {
     setSelectedConcept(concept === selectedConcept ? null : concept); // if concept level is selected change state of drop down menu
     toggleDropdownConcept();
   };
-
+  
+  if(!token){ // if no jwt token then return user to login page
+      return <Login />
+    };
   const handleSelectedChoices = async (selectedLanguage, selectedLevel, selectedConcept) =>{   //send and recieve post request to openai after selecting all required fields
     if (selectedLanguage == null || selectedLevel == null || selectedConcept == null){
-    toast("You Must Select a Language, Level and Concept before starting!");
-    return; }
-    let question = `Give me a coding algorithm question. The coding language is ${selectedLanguage}, make the difficulty level ${selectedLevel}, and make the concept on ${selectedConcept}. Give me starting data to work with but DO NOT show me how to solve it yet.`
-    console.log(question)
-    const url = window.location.pathname + '/airesponse';
-    const response = await toast.promise(
-    fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',},
-      body: JSON.stringify({ prompt: question}),
+      toast("You Must Select a Language, Level and Concept before starting!");
+      return; }
+      let question = `Give me a coding algorithm question. The coding language is ${selectedLanguage}, make the difficulty level ${selectedLevel}, and make the concept on ${selectedConcept}. Give me starting data to work with but DO NOT show me how to solve it yet.`
+      console.log(question)
+      const url = window.location.pathname + '/airesponse';
+      const response = await toast.promise(
+        fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',},
+            body: JSON.stringify({ prompt: question}),
     }),{
       pending: `Thinking Of ${selectedLanguage} ${selectedConcept} Question 🤔`,
       success: 'New Question!👌',
@@ -75,7 +77,6 @@ const NavBar = ({code, updateCodeMirrorValue, sendToParent}) => {
     setAiCheckingWork(null) 
     setSaveButton(null)
     return responseData; 
-  
   }
 
 const sendResponse = async () =>{ //send message including user's code to check on how user did
@@ -138,40 +139,29 @@ const getSolution = async (selectedLanguage) =>{ //get solution code from ai if 
 
 const saveFile = async ()=>{
 try{
-const question = `// ${aiResponse}`
-//console.log(question)
+const question = `${aiResponse}`
 let solution = document.querySelector(".cm-content").innerText;
 let files = question + '\n' + `${solution}`;
 setFiles(files)
 sendToParent(files)
-
-if (!token) {
-  return false;
-}
-
 const {data} = await saveWork({
-
-    variables: { solutionData: {
-      question: question,
-      solution: solution
-    }}
-  }
-)
-
-console.log(data)
+  variables: { solutionData: {
+    question: question,
+    solution: solution
+  }}})
+toast("Saved ✅")
 }catch(err){
-console.error.apply(err)
+  console.error.apply(err)
+  toast("Error Saving")
 }
-
 }
-  return (
-    <>
-    <nav style={{ backgroundColor: "#000", padding: "10px" }}>
+return (
+  <>
+  <nav style={{ backgroundColor: "#000", padding: "10px" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <div className="relative">
           <button className="language" style={{color: "#fff",cursor: "pointer",backgroundColor: "transparent",border: "none",
-              outline: "none",padding: "5px",
-            }} onClick={toggleDropdownLang}>
+              outline: "none",padding: "5px",}} onClick={toggleDropdownLang}>
             {selectedLanguage ? selectedLanguage : "Languages"} ▼ 
           </button>
           {showDropdownLang && (
@@ -279,16 +269,9 @@ console.error.apply(err)
            <button style={{ marginLeft: '10px', padding: '8px 15px', border: 'none', backgroundColor: '#4caf50',
            color: '#ffffff', borderRadius: '3px', cursor: 'pointer'}} onClick={()=> getSolution(selectedLanguage)}> Get Solution</button>
            {saveButton}
-        </div>
-        
+        </div> 
       </div>
     </div>
     <ToastContainer />
         </>  ); };
        export default NavBar;
-
-               
-
-
-               
-
