@@ -10,7 +10,7 @@
 .Brama-Architectural-Bureau-5-hex { color: #0D0D0D; }
 :root{
   --background--color: #181818;;
-  --primary--text--color: #d81465;
+  --primary--text--color:#e62d46;
   --bg--container--black: #141414;
   --color--cyan: #17BEBB;
 }
@@ -56,13 +56,13 @@ body{
 /* .btn--hover--cyan{
   transition: opacity 0.3s; */
 /* } */
-.btn--hover--cyan:hover{
+/* .btn--hover--cyan:hover{
   transition: 2s;
   opacity: 80%;
-  border: 1px solid var(--color--cyan) ;
+  border: 1px solid var(--color--cyan) ; */
 
 
-}
+/* } */
 nav a:hover{
   font-weight:bold;
   transition: font-weight 0.3s; 
@@ -73,4 +73,22 @@ nav a:hover{
   transition: 0.9s;
 color: var(--primary--text--color);
 
+}
+.Login--gif{
+object-fit: cover;}
+
+/* Chat Page
+.chatPage--container{
+  height:85vh;
+  width: 85vh;
+  grid-template-columns:25% 75%;
+  background: var(--bg--container--black);
+  @media screen and (min-width: 720px) and (max-width: 1080px){
+    grid-template-columns: 35% 65%;
+  }
+} */
+
+
+.messages::-webkit-scrollbar {
+  width: 0.8em;
 }

@@ -11,29 +11,40 @@ const Navbar = () => {
     const handleNav = () => {
         setNav(!nav)
     }
+    const  handleLogout = (mobile) => {
+        if(mobile === "mobile"){
+        setNav(false);
+        }
+        // Additional function
+        // () => {
+        //   // Function logic here
+        //   setNav(false);
+        // };
+        Auth.logout();
+      };
     return (
         <div className="sticky top-0">
             <nav className="flex  justify-between items-center h-24 max-w-[100%] mx-auto px-4 text-white  nav--bar">
                 <h1 className="w-full text-3xl font-bold primary--text--color"> CODE CLUB</h1>
                 <ul className="hidden md:flex">
                     <Link to={'/'} className="p-4 nav--links">HOME</Link>
-                    <Link to={'/login'} className="p-4">LOGIN</Link>
-                    <Link className="p-4">CHAT</Link>
+
+                    <Link className="p-4" to={'/CommunityChat'}>CHAT</Link>
                     {Auth.loggedIn() ? (
                         <>
-                            <Link to={'/login'} className="p-4 ">LOGOUT</Link>
+                            <Link to={`/Profile`} className="p-4 ">Profile</Link>
 
                         </>
 
 
                     ) : (
                         <>
-                            <Link to={'/login'} className="p-4 ">LOGIN/SIGNUP</Link>
+                            <Link to={'/login'} className="p-4 ">LOGIN</Link>
                         </>
 
                     )
                     }
-                    <Link className="p-4">CREATORS</Link>
+                    <Link to={'/Creators'} className="p-4">CREATORS</Link>
                     <Link className="p-4">CONTACT</Link>
                 </ul>
                 <div onClick={handleNav} className="block md:hidden">
@@ -46,12 +57,12 @@ const Navbar = () => {
 
                         <Link onClick={() => { setNav(false) }} to={'/'} className="p-4 border-b border-gray-500 w-[100%]">HOME</Link>
                         {Auth.loggedIn() ? (<>
-                                <Link onClick={() => { setNav(false) }} to={'/login'} className="p-4 border-b border-gray-500">LOGOUT</Link>
+                                <Link onClick={() => { handleLogout('mobile') }} className="p-4 border-b border-gray-500">LOGOUT</Link>
                             </>):(<>
-                                <Link onClick={() => { setNav(false) ;Auth.logout();}} to={'/login'} className="p-4 border-b border-gray-500">LOGIN</Link>
+                                <Link onClick={() => { setNav(false) }} to={'/login'} className="p-4 border-b border-gray-500">LOGIN</Link>
                             </>)}
-                        <Link onClick={() => { setNav(false) }} className="p-4 border-b border-gray-500">CHAT</Link>
-                        <Link onClick={() => { setNav(false) }} className="p-4 border-b border-gray-500">CREATORS</Link>
+                        <Link onClick={() => { setNav(false) }} className="p-4 border-b border-gray-500"  to={'/CommunityChat'}>CHAT</Link>
+                        <Link onClick={() => { setNav(false) }} to={'/Creators'} className="p-4 border-b border-gray-500">CREATORS</Link>
                         <Link onClick={() => { setNav(false) }} className="p-4">CONTACT</Link>
                     </ul>
                 </div>
