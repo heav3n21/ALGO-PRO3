@@ -28,11 +28,32 @@ const client = new ApolloClient({
   link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
 });
-function App() {
+
+
+function App({sendToChild}) {
+
   const [files, setFiles] = useState([]);
+
+  //console.log(files)
   const updateFiles = (newFiles) => {
     setFiles(newFiles);
   };
+  
+  const handleClick = () =>{
+    //console.log("beee")
+    
+  }
+  
+  const handle = function handleFromChild(files){
+  console.log(`From App ${files}`)
+return files;
+  //sendToChild(files)
+  //setFiles(files)
+
+}
+console.log(` Handle From Child Function.. ${handle}`)
+
+
   return (
     <ApolloProvider client={client}>
     <Router>
@@ -47,7 +68,7 @@ function App() {
             <Link className="p-4">LOGIN</Link>
                 <Link className="p-4" to="/chat">CHALLENGE</Link>
               <Link className="p-4">CONTACT</Link>
-              <Link className="p-4" to='/files'>FILES</Link>
+              <Link className="p-4" to='/files' onClick={handleClick}>FILES</Link>
           </li>
         </ul>
         {/* <div onClick={handleNav} className="block md:hidden">
@@ -61,9 +82,9 @@ function App() {
 
       <Routes>
         <Route path="/" element={<Homepage />} />
-        <Route path="/chat" element={<CHAT files={files} />}
+        <Route path="/chat" element={<CHAT files={files} sendToApp={handle} />}
         />
-        <Route path="/files" element={<FilePages files={files} updateFiles={updateFiles} />}/>
+        <Route path="/files" element={<FilePages files={files} updateFiles={updateFiles} handleFromChild={handle}/>}/>
         <Route path="/login" element={<Login />} />
 
       </Routes>
@@ -73,4 +94,5 @@ function App() {
 }
 
 export default App;
+
 
