@@ -5,8 +5,7 @@ import { useQuery} from "@apollo/client";
 import Auth from '../utils/auth'
 
 const FilesPage = ({ files}) => {
-    //console.log(files)
-//   const [fetchFiles, setfetchFiles] = useState(null)
+
  const token = Auth.loggedIn() ? Auth.getToken() : null;
      let profile = Auth.getProfile();
      let userId = profile.data._id
@@ -22,7 +21,7 @@ const FilesPage = ({ files}) => {
       },
     });
 
-    let savedWork = ""
+    
     if(loading === false){
       //console.log(data, loading)
       let savedWork = data.savedFiles.savedWork;
@@ -32,6 +31,23 @@ if (error) {
       // Handle error state
       console.error(error)
     }
+
+
+const downloadFile = (e) =>{
+  const currentDate = new Date();
+const uniqueNumber = currentDate.getTime();
+
+  const fileName = `algorithm${uniqueNumber}.txt`
+  let textContent = e.target.parentElement.innerText;
+  console.log(textContent)
+const element = document.createElement('a');
+const file = new Blob([textContent], { type: 'text/plain' });
+element.href = URL.createObjectURL(file);
+element.download = fileName;
+element.click();
+URL.revokeObjectURL(element.href);
+
+}
 
   return (
     <div
@@ -77,13 +93,14 @@ if (error) {
           >
             {/* {JSON.stringify(data.savedFiles.savedWork[1])} */}
 
-            {data.savedFiles.savedWork.map((file, index) => {
-  let question = file.question;
-  let solution = file.solution;
+            { data.savedFiles.savedWork.map((file, index) => {
+          let question = file.question;
+          let solution = file.solution;
   
   return (
+    <div key={index}>
     <li
-      key={index}
+
       style={{
         display: 'flex',
         alignItems: 'center',
@@ -110,11 +127,12 @@ if (error) {
           color: '#ffffff',
           borderRadius: '3px',
           cursor: 'pointer',
-        }}
+        }} onClick={downloadFile}
       >
         Download
       </button>
     </li>
+    </div>
   );
 })}
 
@@ -137,4 +155,5 @@ if (error) {
 };
 
 export default FilesPage;
+
 
