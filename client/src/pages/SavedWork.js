@@ -6,10 +6,11 @@ import Auth from '../utils/auth'
 
 const FilesPage = ({ files}) => {
     //console.log(files)
-    const token = Auth.loggedIn() ? Auth.getToken() : null;
-    let profile = Auth.getProfile();
-    let userId = profile.data._id
-    console.log(userId)
+//   const [fetchFiles, setfetchFiles] = useState(null)
+ const token = Auth.loggedIn() ? Auth.getToken() : null;
+     let profile = Auth.getProfile();
+     let userId = profile.data._id
+   //console.log(userId)
     
     
     //console.log(Auth.getProfile())
@@ -20,56 +21,17 @@ const FilesPage = ({ files}) => {
         _id: userId,
       },
     });
-    
-    if (loading) {
-      // Handle loading state
-      console.log("loooaddddingg!!!")
-    }
-    
-    if (error) {
+
+    let savedWork = ""
+    if(loading === false){
+      //console.log(data, loading)
+      let savedWork = data.savedFiles.savedWork;
+      console.log([savedWork])
+  }
+if (error) {
       // Handle error state
-      console.log("NNOOOOOOO!!")
+      console.error(error)
     }
-
-
-  console.log({data})
-
-
-
-  
-    console.log(JSON.stringify(data));
-
-    if (!token) {
-      return false;
-    }
-    
-    
-    
-    
-    
-    
-    // const { loading, error, data } = useQuery(QUERY_FILES);
-    //console.log(token)
-    // console.log(JSON.stringify(data))
-
-    if (!token) {
-      return false;
-    }
-    
-
-    
-  const fileNames = [
-    'file1.txt',
-    'file2.txt',
-    'file3.txt',
-    'file4.txt',
-    'file5.txt',
-    'file6.txt',
-    'file7.txt',
-    'file8.txt',
-    'file9.txt',
-    'file10.txt',
-  ];
 
   return (
     <div
@@ -77,11 +39,13 @@ const FilesPage = ({ files}) => {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        height: '100vh',
+       // height: '100vh',
         backgroundColor: '#f6f8fa',
       }}
     >
+      {/* {fetchFiles} */}
       <div
+      id={'files'}
         style={{
             width: '75%',
           padding: '20px',
@@ -92,6 +56,7 @@ const FilesPage = ({ files}) => {
           bottom: '15%'
         }}
       >
+        
         <h1
           style={{
             marginTop: 0,
@@ -102,7 +67,7 @@ const FilesPage = ({ files}) => {
         >
           My Files
         </h1>
-        {fileNames.length > 0 ? (
+        {!loading? (
           <ul
             style={{
               listStyleType: 'none',
@@ -110,32 +75,49 @@ const FilesPage = ({ files}) => {
               padding: 0,
             }}
           >
-            {fileNames.map((file, index) => (
-              <li
-                key={index}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  marginBottom: '10px',
-                }}
-              >
-                <FiFile
-                  style={{
-                    marginRight: '10px',
-                    fontSize: '20px',
-                    color: '#0366d6',
-                  }}
-                />
-                <span
-                  style={{
-                    fontSize: '16px',
-                    color: '#24292e',
-                  }}
-                >
-                  {file}
-                </span>
-              </li>
-            ))}
+            {/* {JSON.stringify(data.savedFiles.savedWork[1])} */}
+
+            {data.savedFiles.savedWork.map((file, index) => {
+  let question = file.question;
+  let solution = file.solution;
+  
+  return (
+    <li
+      key={index}
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        marginBottom: '20px',
+        padding: '10px',
+        backgroundColor: '#f2f2f2',
+        borderRadius: '6px',
+      }}
+    >
+      <div style={{ flex: 1 }}>
+     
+        <p style={{ marginBottom: '10px' }}>{question}</p>
+        
+    
+       <pre> <p>{solution}</p></pre>
+      </div>
+      
+      <button
+        style={{
+          marginLeft: '20px',
+          padding: '8px 15px',
+          border: 'none',
+          backgroundColor: '#4caf50',
+          color: '#ffffff',
+          borderRadius: '3px',
+          cursor: 'pointer',
+        }}
+      >
+        Download
+      </button>
+    </li>
+  );
+})}
+
           </ul>
         ) : (
           <p
@@ -146,7 +128,7 @@ const FilesPage = ({ files}) => {
               color: '#999',
             }}
           >
-            No files found.
+           No files found
           </p>
         )}
       </div>
