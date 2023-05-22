@@ -65,7 +65,7 @@ console.log(` Handle From Child Function.. ${handle}`)
         <ul className="hidden md:flex">
           <li>
             <Link className="p-4" to="/">HOME</Link>
-            <Link className="p-4">LOGIN</Link>
+            <Link className="p-4" to="/login">LOGIN</Link>
                 <Link className="p-4" to="/chat">CHALLENGE</Link>
               <Link className="p-4">CONTACT</Link>
               <Link className="p-4" to='/files' onClick={handleClick}>FILES</Link>
