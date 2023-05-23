@@ -11,7 +11,8 @@
 :root{
   --background--color: #181818;;
   --primary--text--color: #3B3F8C;
-  
+  --bg--container--black: #141414;
+
 }
 
 
@@ -27,7 +28,8 @@ body{
 
 }
 .btn--homepage--chat{
-  background-color: #3B3F8C;
+  background-color: var(--bg--container--black);
+
   /* padding: 10px; */
   box-shadow: 1px 1px 1rem black;
   

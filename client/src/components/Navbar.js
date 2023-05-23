@@ -14,7 +14,7 @@ const Navbar = () => {
         Auth.logout();
       };
     return (
-        <div className="sticky top-0">
+        <div className=" relative top-0">
             <nav style={{position: 'relative', zIndex: '9'}} className="flex  justify-between items-center h-24 max-w-[100%] mx-auto px-4 text-white  nav--bar">
                 <h1 className="w-full text-3xl font-bold primary--text--color"> ALGO PRO</h1>
                 <ul className="hidden md:flex">
@@ -23,7 +23,7 @@ const Navbar = () => {
     
                     <Link className="p-4" to="/chat">CHALLENGE</Link>
                     {Auth.loggedIn() ? (
-                        <>  <Link to={`/Profile`} className="p-4 ">Profile</Link> 
+                        <>  <Link to={`/Profile`} className="p-4 ">PROFILE</Link> 
                         <Link onClick={() => { handleLogout('mobile') }} className="p-4">LOGOUT</Link>
                           <Link className="p-4" to='/files'>FILES</Link></>
 
@@ -37,15 +37,15 @@ const Navbar = () => {
                     {nav ? <AiOutlineClose size={20} /> : <AiOutlineMenu size={20} />}
 
                 </div>
-                <nav className='relative' style={{zIndex: "999999"}} className={nav ? "fixed left-0 top-0 w-[60%] h-full nav--bar ease-in-out duration-500" : "fixed left-[-100%]"} style={{zIndex: "999999"}}>
+                <nav  className={nav ? " z-[9999] fixed left-0 top-0 w-[60%] h-full nav--bar ease-in-out duration-500" : "fixed  bg-purple-800 left-[-100%]"} >
                     <h1 className="w-full text-3xl font-bold primary--text--color m-4"> ALGO PRO</h1>
-                    <ul style={{zIndex: "99999999"}} className="p-4 flex flex-col relative">
+                    <ul style={{zIndex: "70"}} className="p-4 flex flex-col relative">
 
                         <Link onClick={() => { setNav(false) }} to={'/'} className="p-4 border-b border-gray-500 w-[100%]">HOME</Link>
                         {Auth.loggedIn() ? (<>
-                            <Link className="p-4" to="/chat">CHALLENGE</Link>
-                            <Link className="p-4" to='/files'>FILES</Link>
-                                <Link onClick={() => { handleLogout('mobile') }} className="p-4 border-b border-gray-500">LOGOUT</Link>
+                            <Link className="p-4  border-b border-gray-500 w-[100%]" to="/chat">CHALLENGE</Link>
+                            <Link className="p-4  border-b border-gray-500 w-[100%]" to='/files'>FILES</Link>
+                                <Link to="/Profile" className="p-4 border-b border-gray-500">PROFILE</Link>
                             </>):(<>
                                 <Link onClick={() => { setNav(false) }} to={'/login'} className="p-4 border-b border-gray-500">LOGIN</Link>
                             </>)}

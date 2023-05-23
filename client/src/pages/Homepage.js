@@ -5,12 +5,15 @@ import IMGprogammer from "../images/programmer.png"
 import Footer from '../components/Footer'
 function Homepage() {
 
-
+    const handleButtonClick = () => {
+        window.location.href = "/chat";
+      };
     return (
+
         <>
         
         <div  className="text-white">
-            <motion.div animate={{ y: 0, scale: 1 }} transition={{ type: 'tween', duration: 2 }} initial={{ scale: 100 }} className="max-w-[800px] mt-[-106px] w-full h-screen mx-auto text-center flex flex-col justify-center  items-center">
+        <motion.div animate={{ y: 0, scale: 1 }} transition={{ type: 'tween', duration: 1 }} initial={{ scale: 2 }} className="max-w-[800px] mt-[-106px] w-full h-screen mx-auto text-center flex flex-col justify-center  items-center">
                 <p className="primary--text--color font-bold text-xl"> GROWING WITH A.I 4 ALGO </p>
                 <h1 className="md:text-7xl sm:text-5xl text-4xl font-bold md:py-6"> GROW WITH CODE CLUB</h1>
                 <div className="flex justify-center items-center ">
@@ -25,8 +28,8 @@ function Homepage() {
                     </p>
 
                 </div>
-                <button className="rounded-md font-medium py-3 btn--homepage--chat w-[200px] mt-2 text-black" > Get Started coding</button>
-            </motion.div>
+                <motion.button onClick={handleButtonClick} whileHover={{scale: 1.1, textShadow:'0px 0px 8px rgb(235,255,255)', boxShadow:'0px 0px 8px rgb(255,255,255)', transition: { type: 'tween', duration: 4 }}} className=" rounded-md font-semibold py-3 shadow--css w-[200px0] bg-white mt-4 px-2 text-black bg--container--cyan" > Get Started coding</motion.button>    
+                        </motion.div>
             <div className="w-full py-14 px-4">
                 <div className="max-w-[1240px] mx-auto grid md:grid-cols-2">
                     <img className="mx-auto my-4" src={IMGprogammer} alt="/"/>
@@ -43,7 +46,7 @@ function Homepage() {
 
             </div>
         </div>
-        <Footer/>
+     
  </>
 
     )

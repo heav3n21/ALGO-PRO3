@@ -4,7 +4,7 @@ require('dotenv').config();
 const { Configuration, OpenAIApi } = require('openai');
 
 const configuration = new Configuration({
-  apiKey: process.env.OPEN_AI_KEY,
+  apiKey: "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",
 });
 const openai = new OpenAIApi(configuration);
 router.post("/chat/airesponse", async (req, res) => {

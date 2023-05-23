@@ -34,6 +34,7 @@ type Mutation{
     login(email:String!,password:String!):Auth
     saveWork(solutionData: WorkInput!): User
     removeWork(_id: ID): User
+    updateUsername(username:String!):User
 }
 
 `

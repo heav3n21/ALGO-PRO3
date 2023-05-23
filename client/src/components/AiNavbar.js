@@ -156,17 +156,18 @@ toast("Saved ✅")
 }
 return (
   <>
-  <nav style={{ backgroundColor: "#000", padding: "10px" }}>
+  <nav className =" flex flex-col -z-[399] " style={{ backgroundColor: "#000", padding: "10px" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <div className="relative">
-          <button className="language" style={{color: "#fff",cursor: "pointer",backgroundColor: "transparent",border: "none",
+        <div className=" ">
+        <div className="relative z-[0]">
+          <button className="language  " style={{color: "#fff",cursor: "pointer",backgroundColor: "transparent",border: "none",
               outline: "none",padding: "5px",}} onClick={toggleDropdownLang}>
             {selectedLanguage ? selectedLanguage : "Languages"} ▼ 
           </button>
           {showDropdownLang && (
-            <ul className="relative"
+            <ul className="  -z-9"
               style={{ position: "absolute", backgroundColor: "#333", color: "#fff", padding: "10px", borderRadius: "5px",
-                top: "100%", left: "0",zIndex: "1",}}>
+                top: "100%", left: "0",}}>
               <li>
                 <a style={{ textDecoration: "none", color: "#fff", zIndex: "1", cursor: "pointer" }}
                   onClick={() => handleLanguageSelection("JavaScript")}> JavaScript</a>
@@ -180,6 +181,7 @@ return (
                   onClick={() => handleLanguageSelection("C++")}> C++</a>
               </li>
             </ul>)}
+            </div>
         </div>
         <div className="relative">
           <button style={{color: "#fff",cursor: "pointer", backgroundColor: "transparent", border: "none",

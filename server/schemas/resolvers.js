@@ -25,6 +25,9 @@ const resolvers = {
 
     },
     Mutation: {
+        async updateUsername(parent, {username},context){
+            return User.findOneAndUpdate({_id:context.user._id},{username},{new:true})
+                    },
         async login(parent, { email, password }) {
             const user = await User.findOne({ email });
             if (!user) {
