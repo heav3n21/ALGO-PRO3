@@ -1,27 +1,40 @@
 const {gql} = require('apollo-server-express');
 
 const typeDefs = gql`
-type savedChatSchema{
-    chatLog:String
-}
 type User {
     _id: ID!
     username: String
     email:String
-    savedChat:[savedChatSchema]
+    password: String
+    savedWork: [Work]
 }
+
+type Work{
+    _id: ID
+    question: String
+    solution: String
+}
+
+input WorkInput{
+    question: String
+    solution: String
+}
+
 type Auth{
     token:ID!
     user:User
 }
 type Query{
+   user: User
+   savedFiles(_id: ID): User
    oneUser(email:String!):User
-# user:[User]
 }
 type Mutation{
-    addUser( email:String!, password:String!,username:String!):Auth
+    addUser( email:String!, password:String!, username: String):Auth
     login(email:String!,password:String!):Auth
-    saveChat(chatLog: String!):User
+    saveWork(solutionData: WorkInput!): User
+    removeWork(_id: ID): User
+    updateUsername(username:String!):User
 }
 
 `

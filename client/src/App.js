@@ -1,16 +1,15 @@
-import React from "react";
-import Navbar from "./components/Navbar";
-import Homepage from "./pages/Homepage"
-import Footer from "./components/Footer"
-import Login from "./pages/Loginpage"
-import { setContext } from "@apollo/client/link/context"
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React, { useState } from "react";
 import { ApolloClient, ApolloProvider, InMemoryCache, createHttpLink } from "@apollo/client";
-
-import ChatRoomPage from "./pages/ChatRoomPage";
-import CommunityPage from "./pages/CommunityPage.js";
-import Creators from "./pages/Creators";
+import Navbar from "./components/Navbar";
+import FilePages from './pages/SavedWork'
+import Homepage from "./pages/Homepage";
+import Footer from "./components/Footer";
+import CHAT from "../src/components/CHAT";
+import Login from "./pages/Loginpage"
 import Profile from "./pages/Profile";
+import { setContext } from "@apollo/client/link/context"
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import Auth from "./utils/auth"
 const httpLink = createHttpLink({
   uri: '/graphql',
 });
@@ -31,23 +30,65 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-function App() {
+
+function App({sendToChild}) {
+
+  const [files, setFiles] = useState([]);
+
+  //console.log(files)
+  const updateFiles = (newFiles) => {
+    setFiles(newFiles);
+  };
+  
+  const handleClick = () =>{
+    //console.log("beee")
+    
+  }
+  
+  const handle = function handleFromChild(files){
+  console.log(`From App ${files}`)
+return files;
+  //sendToChild(files)
+  //setFiles(files)
+
+}
+console.log(` Handle From Child Function.. ${handle}`)
+
+
   return (
     <ApolloProvider client={client}>
-      <Router>
-        <div className="App">
-          <Navbar />
-          <Routes>
-            <Route exact path="/" element={<Homepage />} />
-            <Route exact path="/login" element={<Login />} />
-            <Route exact path="/CommunityChat" element={<CommunityPage/>}/>
-            <Route exact path="/Creators" element = {<Creators/>}/>
-            <Route exact path="/ChatRoom" element = {<ChatRoomPage/>}/>
-            <Route exact path="/profile" element = {<Profile/>}/>
-          </Routes>
-          <Footer />
-        </div>
-      </Router>
+    <Router>
+      {/* <nav>
+      <div className="flex justify-between items-center h-24 max-w-[100%] mx-auto px-4 text-white  nav--bar">
+        <h1 className="w-full text-3xl font-bold primary--text--color">
+          CODE CLUB
+        </h1>
+        <ul className="hidden md:flex">
+          <li>
+            <Link className="p-4" to="/">HOME</Link>
+            <Link className="p-4" to="/login">LOGIN</Link>
+                <Link className="p-4" to="/chat">CHALLENGE</Link>
+              <Link className="p-4">CONTACT</Link>
+              <Link className="p-4" to='/files' onClick={handleClick}>FILES</Link>
+          </li>
+        </ul>
+       
+
+        <div className=""></div>
+      </div>
+      </nav> */}
+      <Navbar className="relative" style={{zIndex: '9999'}}/>
+      <Routes>
+        <Route path="/" element={<Homepage />} />
+        <Route path="/chat" element={<CHAT files={files} sendToApp={handle} />}
+        />
+        <Route path="/files" element={<FilePages files={files} updateFiles={updateFiles} handleFromChild={handle}/>}/>
+        <Route path="/login" element={<Login />} />
+        <Route exact path="/profile" element = {<Profile/>}/>
+
+      </Routes>
+      <Footer />
+    </Router>
     </ApolloProvider>
   );
 }

@@ -10,85 +10,28 @@
 .Brama-Architectural-Bureau-5-hex { color: #0D0D0D; }
 :root{
   --background--color: #181818;;
-  --primary--text--color:#e62d46;
+  --primary--text--color: #3B3F8C;
   --bg--container--black: #141414;
-  --color--cyan: #17BEBB;
+
 }
 
 
 body{
   background-color: var(--background--color);
-  
- 
-}
-.bg--container--cyan{
-  background-color: var(--color--cyan);
 }
 .primary--text--color{
   color: var(--primary--text--color)
 }
-.second--text--color{
-  color:var(--color--cyan)
-
-}
-.primary--background--color{
-  background-color: var(--primary--text--color);
-}
-.bg--container--black{
-  background-color: var(--bg--container--black);
-}
 .nav--bar{
- background-color: var(--bg--container--black);
+  background-color: #141414;;
   box-shadow: 1px 1px 2rem black;
 
 }
+.btn--homepage--chat{
+  background-color: var(--bg--container--black);
 
-.shadow--css{
+  /* padding: 10px; */
   box-shadow: 1px 1px 1rem black;
-}
-
-.btn--hover--pink:hover{
-  background-color: var(--primary--text--color);
-  transition: 0.6s;
   
 
-}
-/* .btn--hover--cyan{
-  transition: opacity 0.3s; */
-/* } */
-/* .btn--hover--cyan:hover{
-  transition: 2s;
-  opacity: 80%;
-  border: 1px solid var(--color--cyan) ; */
-
-
-/* } */
-nav a:hover{
-  font-weight:bold;
-  transition: font-weight 0.3s; 
-}
-nav a:hover{
- 
-  font-size: large;
-  transition: 0.9s;
-color: var(--primary--text--color);
-
-}
-.Login--gif{
-object-fit: cover;}
-
-/* Chat Page
-.chatPage--container{
-  height:85vh;
-  width: 85vh;
-  grid-template-columns:25% 75%;
-  background: var(--bg--container--black);
-  @media screen and (min-width: 720px) and (max-width: 1080px){
-    grid-template-columns: 35% 65%;
-  }
-} */
-
-
-.messages::-webkit-scrollbar {
-  width: 0.8em;
 }

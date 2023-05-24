@@ -1,9 +1,11 @@
 const express = require('express');
 const { ApolloServer } = require('apollo-server-express');
 const path = require('path');
+const ai = require('./utils/airesponse');
 const db = require('./config/connection');
 const { authMiddleware } = require('./utils/auth');
 const { typeDefs, resolvers } = require('./schemas');
+const cors = require('cors');
 
 
 const PORT = process.env.PORT || 3001;
@@ -17,8 +19,10 @@ const server = new ApolloServer({
     context: authMiddleware
 });
 
+app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+app.use(ai)
 
 // if we're in production, serve client/build as static assets
 // if (process.env.NODE_ENV === 'production') {

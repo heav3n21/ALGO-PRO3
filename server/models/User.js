@@ -1,23 +1,25 @@
 const {Schema, model} = require('mongoose');
 const bcrypt = require('bcrypt');
+const workSchema = require('./SavedWork')
 
 const userSchema = new Schema(
     {
         username:{
             type: String,
-            unique: false,
+            unique: true,
+           
         },
         email:{
             type:String, 
             required:true,
             unique:true,
-            match:[/.+@.+\..+/, 'Must use a valid email address'],
+           
         },
         password:{
             type:String, 
             required: true,
         },
-       
+        savedWork: [workSchema]
 
     },
     {

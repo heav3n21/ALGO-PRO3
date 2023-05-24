@@ -16,8 +16,8 @@ mutation login($email: String!, $password: String!){
 
 
 export const ADD_USER = gql`
-mutation addUser($email:String!,$password:String!,$username:String!){
-    addUser(email:$email,password:$password,username:$username){
+mutation addUser($email:String!,$password:String!, $username: String,){
+    addUser(email:$email,password:$password, username: $username){
      token
      user{
             _id
@@ -25,5 +25,34 @@ mutation addUser($email:String!,$password:String!,$username:String!){
         }
     }
 }
+`
+
+export const SAVE_WORK = gql`
+mutation saveWork($solutionData: WorkInput!){
+    saveWork(solutionData: $solutionData){
+        username
+    }
+}
+`
+
+export const REMOVE_WORK = gql`
+mutation removeWork($id: ID){
+    removeWork(_id: $id){
+        username
+    }
+}`
+
+
+
+export const UPDATE_USERNAME =gql`
+mutation updateUsername($username:String!){
+    updateUsername(username:$username){
+        username
+        email
+    }
+}
+
 
 `
+
+
