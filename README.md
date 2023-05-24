@@ -17,5 +17,10 @@ Practicing your programming Algorithm Skills before a job interview, or just sha
 To better prepare myself for interview questions. This allows me to test my skills based on the difficulty level. Beginner, Intermeddiate, Diffcult or Very Difficult.
 
 ## License
-
 MIT
+
+LOGIN PAGE:
+<img width="1481" alt="Screen Shot 2023-05-23 at 6 24 15 PM" src="https://github.com/heav3n21/ALGO-PRO3/assets/119153047/4f4fd453-5f77-48c3-b0e6-86fe759da7af">
+
+CHALLENGE PAGE:
+<img width="1492" alt="Screen Shot 2023-05-23 at 6 24 57 PM" src="https://github.com/heav3n21/ALGO-PRO3/assets/119153047/8100c0a3-52bd-4167-a479-f16c5add097a">
